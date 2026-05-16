@@ -1,6 +1,24 @@
 import React from 'react'
+import { useForm } from '@inertiajs/react'
+
 
 const ClientModal = ({show , onClose}) => {
+    const form = useForm({
+    name: '',
+    email: '',
+    phone: '',
+    city: '',
+    address: '',
+    ntn: '',
+    cnic: '',
+    client_type: 'b2b',
+    business_id: '',        
+
+    });
+
+    const handleSubmit = () => {
+       form.post(route('clients.store'))
+    }
   return (
   <>
 {show && (
@@ -18,11 +36,11 @@ const ClientModal = ({show , onClose}) => {
 <div className="px-8 py-8 space-y-8">
 
 <div className="flex gap-4">
-<button className="flex-1 py-3 px-4 border-2 border-primary bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-all">
+<button onClick={() => form.setData('client_type', 'b2b') } className={`flex-1 py-3 px-4 border-2 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-all ${form.data.client_type === 'b2b' ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant text-secondary hover:border-outline'}`}>
 <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>business</span>
                         B2B
                     </button>
-<button className="flex-1 py-3 px-4 border-2 border-outline-variant text-secondary hover:border-outline transition-all rounded-lg font-label-md text-label-md flex items-center justify-center gap-2">
+<button onClick={() => form.setData('client_type', 'b2c') } className={`flex-1 py-3 px-4 border-2 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-all ${form.data.client_type === 'b2c' ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant text-secondary hover:border-outline'}`}>
 <span className="material-symbols-outlined">person</span>
                         B2C
                     </button>
@@ -30,42 +48,57 @@ const ClientModal = ({show , onClose}) => {
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
 <div className="col-span-2 space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">Business Name</label>
-<input className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="e.g. Acme Corp Pakistan" type="text"/>
+<label className="font-label-md text-label-md text-on-surface-variant block">Business</label>
+<input 
+value={form.data.name}
+onChange={e => form.setData('name', e.target.value)} 
+className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="e.g. Acme Corp Pakistan" type="text"/>
 </div>
-<div className="space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">NTN Number</label>
-<input className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXXXX-X" type="text"/>
-</div>
-<div className="space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">Contact Person Name</label>
-<input className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="Full Name" type="text"/>
-</div>
+{form.data.client_type === 'b2b' ? (
+    <div className="space-y-2">
+        <label className="font-label-md text-label-md text-on-surface-variant block">NTN Number</label>
+        <input value={form.data.ntn} onChange={e => form.setData('ntn', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXXXX-X" type="text"/>
+    </div>
+) : (
+    <div className="space-y-2">
+        <label className="font-label-md text-label-md text-on-surface-variant block">CNIC Number</label>
+        <input value={form.data.cnic} onChange={e => form.setData('cnic', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXX-XXXXXXX-X" type="text"/>
+    </div>
+)}
+
+
 <div className="space-y-2">
 <label className="font-label-md text-label-md text-on-surface-variant block">Phone</label>
-<input className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="+92 XXX XXXXXXX" type="tel"/>
+<input
+value={form.data.phone}
+onChange={e => form.setData('phone', e.target.value)} 
+className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="+92 XXX XXXXXXX" type="tel"/>
 </div>
 <div className="space-y-2">
 <label className="font-label-md text-label-md text-on-surface-variant block">Email</label>
-<input className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="client@company.com" type="email"/>
+<input
+value={form.data.email}
+onChange={e => form.setData('email', e.target.value)} 
+className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="client@company.com" type="email"/>
 </div>
 <div className="col-span-2 space-y-2">
 <label className="font-label-md text-label-md text-on-surface-variant block">City</label>
 <div className="relative">
-<select className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md appearance-none">
-<option>Select City</option>
+<select value={form.data.city}
+onChange={e => form.setData('city', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md appearance-none">
+<option >Select City</option>
 <option>Karachi</option>
-<option>Lahore</option>
-<option>Islamabad</option>
-<option>Faisalabad</option>
-<option>Rawalpindi</option>
+
 </select>
 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
 </div>
 </div>
 <div className="col-span-2 space-y-2">
 <label className="font-label-md text-label-md text-on-surface-variant block">Address</label>
-<textarea className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md resize-none" placeholder="Full postal address" rows="3"></textarea>
+<textarea 
+value={form.data.address}
+onChange={e => form.setData('address',e.target.value)}
+className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md resize-none" placeholder="Full postal address" rows="3"></textarea>
 </div>
 </div>
 
@@ -84,7 +117,7 @@ const ClientModal = ({show , onClose}) => {
 <button onClick={onClose} className="px-6 py-2.5 border border-outline-variant text-secondary hover:bg-surface-container-low rounded-lg font-label-md text-label-md transition-all">
                     Cancel
                 </button>
-<button className="px-8 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all">
+<button onClick={handleSubmit} className="px-8 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all">
                     Save Client
                 </button>
 </div>
