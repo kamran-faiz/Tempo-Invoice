@@ -1,7 +1,7 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 
-const Index = () => {
+const Index = ({clients}) => {
   return (
     <AuthenticatedLayout title="Clients List">
 
@@ -46,22 +46,22 @@ const Index = () => {
 <th className="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-center">Actions</th>
 </tr>
 </thead>
-<tbody className="divide-y divide-outline-variant">
-{/* <!-- Row 1: Indus Tech Solutions (B2B) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
+<tbody  className="divide-y divide-outline-variant"> {clients.map(client => (
+
+<tr key={client.id} className="hover:bg-surface-container-low/50 transition-colors group">
 <td className="px-6 py-4">
 <div className="flex items-center gap-3">
 <div className="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-[12px] flex items-center justify-center">IT</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Indus Tech Solutions</span>
+<span className="font-body-md text-body-md text-on-surface font-semibold">{client.name}</span>
 </div>
 </td>
 <td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm rounded">B2B</span>
+<span className="px-2 py-0.5 bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm rounded">{client.client_type}</span>
 </td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Karachi</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 21 3456789</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">billing@industech.pk</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">1234567-8</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{client.city}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{client.phone}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{client.email}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{client.cnic} {client.ntn}</td>
 <td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">24</td>
 <td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 1.2M</td>
 <td className="px-6 py-4 text-center">
@@ -71,174 +71,7 @@ const Index = () => {
 </div>
 </td>
 </tr>
-{/* <!-- Row 2: Omar Farooq (B2C) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold text-[12px] flex items-center justify-center">OF</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Omar Farooq</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm rounded">B2C</span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Lahore</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 300 1234567</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">omar.farooq@email.com</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">35201-1234567-1</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">5</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 145,000</td>
-<td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
-</div>
-</td>
-</tr>
-{/* <!-- Row 3: Blue Wave Textiles (B2B) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-[12px] flex items-center justify-center">BW</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Blue Wave Textiles</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm rounded">B2B</span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Faisalabad</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 41 9876543</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">accounts@bluewave.com</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">7654321-0</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">42</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 3.8M</td>
-<td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
-</div>
-</td>
-</tr>
-{/* <!-- Row 4: Zeba Bakhtiar (B2C) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold text-[12px] flex items-center justify-center">ZB</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Zeba Bakhtiar</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm rounded">B2C</span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Islamabad</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 333 4455667</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">zeba.b@gmail.com</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">61101-9988776-2</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">2</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 28,500</td>
-<td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
-</div>
-</td>
-</tr>
-{/* <!-- Row 5: Hameed & Sons (B2B) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-[12px] flex items-center justify-center">HS</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Hameed & Sons</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm rounded">B2B</span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Multan</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 61 5566778</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">info@hameedsons.com.pk</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">8877665-4</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">18</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 890,000</td>
-<td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
-</div>
-</td>
-</tr>
-{/* <!-- Row 6: Sahir Lodhi (B2C) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold text-[12px] flex items-center justify-center">SL</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Sahir Lodhi</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm rounded">B2C</span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Karachi</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 312 9988112</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">sahir@lodhientertainment.pk</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">42101-5544332-1</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">12</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 450,000</td>
-<td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
-</div>
-</td>
-</tr>
-{/* <!-- Row 7: Pak-China Logistics (B2B) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-[12px] flex items-center justify-center">PC</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Pak-China Logistics</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm rounded">B2B</span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Gwadar</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 86 4211334</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">ops@pakchina.com</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">9922883-1</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">64</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 9.4M</td>
-<td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
-</div>
-</td>
-</tr>
-{/* <!-- Row 8: Aisha Qureshi (B2C) --> */}
-<tr className="hover:bg-surface-container-low/50 transition-colors group">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold text-[12px] flex items-center justify-center">AQ</div>
-<span className="font-body-md text-body-md text-on-surface font-semibold">Aisha Qureshi</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm rounded">B2C</span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Peshawar</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">+92 345 8877112</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">aisha.q@outlook.com</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">17301-4433221-8</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">1</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 12,000</td>
-<td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
-</div>
-</td>
-</tr>
+))}
 </tbody>
 </table>
 {/* <!-- Pagination --> */}
