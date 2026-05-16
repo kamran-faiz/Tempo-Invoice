@@ -1,7 +1,11 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
+import {useState} from 'react'
+import ClientModal from '../../Components/ClientModal'
+
 
 const Index = ({clients}) => {
+  const [showModal,setShowModal] = useState(false);
   return (
     <AuthenticatedLayout title="Clients List">
 
@@ -18,7 +22,7 @@ const Index = ({clients}) => {
 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]" data-icon="search">search</span>
 <input className="pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md w-[300px] focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Search clients..." type="text"/>
 </div>
-<button className="bg-primary text-on-primary px-5 py-2.5 rounded-lg flex items-center gap-2 hover:opacity-90 transition-all font-label-md text-label-md shadow-sm">
+<button onClick={() => setShowModal(true)} className="bg-primary text-on-primary px-5 py-2.5 rounded-lg flex items-center gap-2 hover:opacity-90 transition-all font-label-md text-label-md shadow-sm">
 <span className="material-symbols-outlined text-[20px]" data-icon="add">add</span>
                         Add Client
                     </button>
@@ -112,6 +116,7 @@ const Index = ({clients}) => {
 </div>
 </div>
 </div>
+<ClientModal onClose={() => setShowModal(false)} show={showModal} />
     </AuthenticatedLayout>
   )
 }
