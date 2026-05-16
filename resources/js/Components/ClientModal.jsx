@@ -21,6 +21,7 @@ const ClientModal = ({show , onClose}) => {
        form.post(route('clients.store'),{
         onSuccess: () => {
             onClose();
+             form.reset();
         }
        })
     }
@@ -57,17 +58,22 @@ const ClientModal = ({show , onClose}) => {
 <input 
 value={form.data.name}
 onChange={e => form.setData('name', e.target.value)} 
-className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="e.g. Acme Corp Pakistan" type="text"/>
+className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg
+ focus:ring-2 focus:ring-primary/20 focus:border-primary 
+ outline-none transition-all font-body-md text-body-md" placeholder="e.g. Acme Corp Pakistan" type="text"/>
+ {form.errors.name && <p className="text-error text-label-sm">{form.errors.name}</p>}
 </div>
 {form.data.client_type === 'b2b' ? (
     <div className="space-y-2">
         <label className="font-label-md text-label-md text-on-surface-variant block">NTN Number</label>
         <input value={form.data.ntn} onChange={e => form.setData('ntn', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXXXX-X" type="text"/>
+        {form.errors.client_type && <p className="text-error text-label-sm">{form.errors.client_type}</p>}
     </div>
 ) : (
     <div className="space-y-2">
         <label className="font-label-md text-label-md text-on-surface-variant block">CNIC Number</label>
         <input value={form.data.cnic} onChange={e => form.setData('cnic', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXX-XXXXXXX-X" type="text"/>
+        {form.errors.cnic && <p className="text-error text-label-sm">{form.errors.cnic}</p>}
     </div>
 )}
 
@@ -77,24 +83,35 @@ className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg 
 <input
 value={form.data.phone}
 onChange={e => form.setData('phone', e.target.value)} 
-className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="+92 XXX XXXXXXX" type="tel"/>
+className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg 
+focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all 
+font-body-md text-body-md" placeholder="+92 XXX XXXXXXX" type="tel"/>
+{form.errors.phone && <p className="text-error text-label-sm">{form.errors.phone}</p>}
 </div>
 <div className="space-y-2">
 <label className="font-label-md text-label-md text-on-surface-variant block">Email</label>
 <input
 value={form.data.email}
 onChange={e => form.setData('email', e.target.value)} 
-className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="client@company.com" type="email"/>
+className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg 
+focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none 
+transition-all font-body-md text-body-md" placeholder="client@company.com" type="email"/>
+{form.errors.email && <p className="text-error text-label-sm">{form.errors.email}</p>}
 </div>
 <div className="col-span-2 space-y-2">
 <label className="font-label-md text-label-md text-on-surface-variant block">City</label>
 <div className="relative">
 <select value={form.data.city}
-onChange={e => form.setData('city', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md appearance-none">
+onChange={e => form.setData('city', e.target.value)} className="w-full px-4 py-2.5
+bg-white border border-outline-variant rounded-lg 
+focus:ring-2 focus:ring-primary/20 focus:border-primary 
+outline-none transition-all font-body-md text-body-md appearance-none">
+    
 <option >Select City</option>
 <option>Karachi</option>
 
 </select>
+{form.errors.city && <p className="text-error text-label-sm">{form.errors.city}</p>}
 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
 </div>
 </div>
@@ -103,7 +120,11 @@ onChange={e => form.setData('city', e.target.value)} className="w-full px-4 py-2
 <textarea 
 value={form.data.address}
 onChange={e => form.setData('address',e.target.value)}
-className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md resize-none" placeholder="Full postal address" rows="3"></textarea>
+className="w-full px-4 py-2.5 bg-white border border-outline-variant 
+rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary
+outline-none transition-all font-body-md text-body-md resize-none" 
+placeholder="Full postal address" rows="3"></textarea>
+{form.errors.address && <p className="text-error text-label-sm">{form.errors.address}</p>}
 </div>
 </div>
 
