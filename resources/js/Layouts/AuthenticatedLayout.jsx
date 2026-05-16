@@ -1,4 +1,6 @@
+import { usePage,Link } from '@inertiajs/react'
 export default function AuthenticatedLayout({ title, children }) {
+    const { url } = usePage()
     return (
         <div>
             <aside className="fixed left-0 top-0 h-full w-[240px] bg-inverse-surface flex flex-col py-6 px-4 z-50">
@@ -7,30 +9,31 @@ export default function AuthenticatedLayout({ title, children }) {
     <p className="font-label-sm text-label-sm text-primary-fixed-dim opacity-70">Fintech Solutions</p>
 </div>
 <nav className="flex-grow flex flex-col gap-1">
-    <a className="flex items-center gap-3 px-4 py-3 text-primary-fixed-dim bg-on-primary-fixed-variant rounded-lg font-bold opacity-90 transition-all" href="#">
+    <Link className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-label-md text-label-md ${url === '/' ? 'text-primary-fixed-dim bg-on-primary-fixed-variant font-bold opacity-90' : 'text-secondary-fixed-dim hover:text-primary-fixed-dim hover:bg-on-primary-fixed-variant'}`} href="/">
         <span className="material-symbols-outlined">dashboard</span>
         <span className="font-label-md text-label-md">Dashboard</span>
-    </a>
-    <a className="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-on-primary-fixed-variant hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+    </Link>
+    <Link className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-label-md text-label-md ${url.startsWith('/clients') ? 'text-primary-fixed-dim bg-on-primary-fixed-variant font-bold opacity-90' : 'text-secondary-fixed-dim hover:text-primary-fixed-dim hover:bg-on-primary-fixed-variant'}`} href="/clients">
+        
         <span className="material-symbols-outlined">group</span>
         <span className="font-label-md text-label-md">Clients</span>
-    </a>
-    <a className="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-on-primary-fixed-variant hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+    </Link>
+    <Link className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-label-md text-label-md ${url.startsWith('/products')   ? 'text-primary-fixed-dim bg-on-primary-fixed-variant font-bold opacity-90' : 'text-secondary-fixed-dim hover:text-primary-fixed-dim hover:bg-on-primary-fixed-variant'}`} href="/products">
         <span className="material-symbols-outlined">inventory_2</span>
         <span className="font-label-md text-label-md">Products</span>
-    </a>
-    <a className="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-on-primary-fixed-variant hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+    </Link>
+    <Link className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-label-md text-label-md ${url.startsWith('/invoices')  ? 'text-primary-fixed-dim bg-on-primary-fixed-variant font-bold opacity-90' : 'text-secondary-fixed-dim hover:text-primary-fixed-dim hover:bg-on-primary-fixed-variant'}`} href="/invoices">
         <span className="material-symbols-outlined">description</span>
         <span className="font-label-md text-label-md">Invoices</span>
-    </a>
-    <a className="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-on-primary-fixed-variant hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+    </Link>
+    <Link className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-label-md text-label-md ${url.startsWith('/fbr-logs')  ? 'text-primary-fixed-dim bg-on-primary-fixed-variant font-bold opacity-90' : 'text-secondary-fixed-dim hover:text-primary-fixed-dim hover:bg-on-primary-fixed-variant'}`} href="/fbr-logs">
         <span className="material-symbols-outlined">receipt_long</span>
         <span className="font-label-md text-label-md">FBR Logs</span>
-    </a>
-    <a className="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-on-primary-fixed-variant hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+    </Link>
+   <Link className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-label-md text-label-md ${url.startsWith('/settings')  ? 'text-primary-fixed-dim bg-on-primary-fixed-variant font-bold opacity-90' : 'text-secondary-fixed-dim hover:text-primary-fixed-dim hover:bg-on-primary-fixed-variant'}`} href="/settings">
         <span className="material-symbols-outlined">settings</span>
         <span className="font-label-md text-label-md">Settings</span>
-    </a>
+    </Link>
 </nav>
 <div className="mt-auto border-t border-outline-variant/20 pt-6 flex flex-col gap-1">
     <div className="flex items-center gap-3 px-4 py-2 text-secondary-fixed-dim">
