@@ -16,8 +16,13 @@ const ClientModal = ({show , onClose}) => {
 
     });
 
+
     const handleSubmit = () => {
-       form.post(route('clients.store'))
+       form.post(route('clients.store'),{
+        onSuccess: () => {
+            onClose();
+        }
+       })
     }
   return (
   <>
