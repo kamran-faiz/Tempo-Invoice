@@ -5,6 +5,7 @@ import ClientModal from '../../Components/ClientModal'
 
 
 const Index = ({clients}) => {
+  const [selectedClient,setSelectedClient] = useState(null);
   const [showModal,setShowModal] = useState(false);
   return (
     <AuthenticatedLayout title="Clients List">
@@ -71,7 +72,7 @@ const Index = ({clients}) => {
 <td className="px-6 py-4 text-center">
 <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
 <button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
-<button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
+<button onClick={() => { setSelectedClient(client); setShowModal(true); }} className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
 </div>
 </td>
 </tr>
@@ -116,7 +117,9 @@ const Index = ({clients}) => {
 </div>
 </div>
 </div>
-<ClientModal onClose={() => setShowModal(false)} show={showModal} />
+<ClientModal onClose={() => {setShowModal(false); setSelectedClient(null)}} 
+show={showModal}
+client={selectedClient} />
     </AuthenticatedLayout>
   )
 }

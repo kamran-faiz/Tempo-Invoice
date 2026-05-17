@@ -1,29 +1,55 @@
 import React from 'react'
-import { useForm } from '@inertiajs/react'
+import { useForm} from '@inertiajs/react'
+import { useEffect } from 'react'
 
 
-const ClientModal = ({show , onClose}) => {
+const ClientModal = ({show , onClose , client}) => {
     const form = useForm({
-    name: '',
-    email: '',
-    phone: '',
-    city: '',
-    address: '',
-    ntn: '',
-    cnic: '',
-    client_type: 'b2b',
-    business_id: '',        
+    name:client?.name || '',
+    email:client?.email || '',
+    phone:client?.phone || '',
+    city:client?.city || '',
+    address:client?.address || '',
+    ntn:client?.ntn || '',
+    cnic:client?.cnic || '',
+    client_type:client?.client_type || 'b2b',
+    business_id:client?.business_id || '',        
 
     });
-
+useEffect(() => {
+    if(client) {
+        form.setData({
+            name: client.name || '',
+            email: client.email || '',
+            phone: client.phone || '',
+            city: client.city || '',
+            address: client.address || '',
+            ntn: client.ntn || '',
+            cnic: client.cnic || '',
+            client_type: client.client_type || 'b2b',
+            business_id: client.business_id || '',
+        })
+    } else {
+        form.reset()
+    }
+}, [client])
 
     const handleSubmit = () => {
+        if(client){
+            form.put(route('clients.update',client.id),{
+                onSuccess: () =>{
+                    onClose();
+                    form.reset();
+                }
+            })
+        }else{
        form.post(route('clients.store'),{
         onSuccess: () => {
             onClose();
              form.reset();
         }
        })
+       }
     }
   return (
   <>
@@ -33,7 +59,7 @@ const ClientModal = ({show , onClose}) => {
 <div className="bg-white w-[560px] max-h-[90vh] overflow-y-auto rounded-xl shadow-2xl border border-outline-variant flex flex-col animate-in fade-in zoom-in duration-300">
 
 <div className="px-8 py-6 flex justify-between items-center border-b border-outline-variant sticky top-0 bg-white z-10">
-<h2 className="font-headline-md text-headline-md text-on-surface font-bold">Add New Client</h2>
+<h2 className="font-headline-md text-headline-md text-on-surface font-bold">{client ? 'Edit Client' : 'Add Client'}</h2>
 <button onClick={onClose} className="text-outline hover:text-on-surface transition-colors">
 <span className="material-symbols-outlined">close</span>
 </button>
@@ -144,7 +170,7 @@ placeholder="Full postal address" rows="3"></textarea>
                     Cancel
                 </button>
 <button onClick={handleSubmit} className="px-8 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all">
-                    Save Client
+                    {client ? 'Update Client' : 'Save Client'}
                 </button>
 </div>
 </div>
