@@ -2,11 +2,15 @@ import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import {useState} from 'react'
 import ClientModal from '../../Components/ClientModal'
-
+import { router } from '@inertiajs/react'
 
 const Index = ({clients}) => {
   const [selectedClient,setSelectedClient] = useState(null);
   const [showModal,setShowModal] = useState(false);
+  const deleteClient = (id) =>{
+    if(!confirm('Are you sure you want to delete this client?')) return;
+    router.delete(route('clients.destroy',id))
+  }
   return (
     <AuthenticatedLayout title="Clients List">
 
@@ -71,8 +75,10 @@ const Index = ({clients}) => {
 <td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 1.2M</td>
 <td className="px-6 py-4 text-center">
 <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+
 <button className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
 <button onClick={() => { setSelectedClient(client); setShowModal(true); }} className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
+  <button onClick={() => deleteClient(client.id)} className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">delete</span></button>
 </div>
 </td>
 </tr>
