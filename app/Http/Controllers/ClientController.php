@@ -50,6 +50,12 @@ class ClientController extends Controller
         $client->update($validated);
         return redirect()->back()->with('Success', 'Client Updated Successfully');
     }
+    public function show(Client $client)
+{
+    return inertia('Clients/View', [
+        'client' => $client
+    ]);
+}
 
     public function destroy(Client $client){
         $client->delete();
