@@ -16,7 +16,7 @@ const Index = ({clients}) => {
     <AuthenticatedLayout title="Clients List">
 
 {/* <!-- Content Area --> */}
-<div className="p-8 space-y-8">
+<div className="p-8 space-y-8 ">
 {/* <!-- Page Header Row --> */}
 <div className="flex justify-between items-center">
 <div className="flex items-center gap-3">

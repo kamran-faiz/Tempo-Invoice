@@ -80,7 +80,7 @@ useEffect(() => {
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
 <div className="col-span-2 space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">Business</label>
+<label className="font-label-md text-label-md text-on-surface-variant block">Business Name</label>
 <input 
 value={form.data.name}
 onChange={e => form.setData('name', e.target.value)} 
@@ -92,8 +92,10 @@ className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg
 {form.data.client_type === 'b2b' ? (
     <div className="space-y-2">
         <label className="font-label-md text-label-md text-on-surface-variant block">NTN Number</label>
+        {/* FIX 1: Restored complete valid input element */}
         <input value={form.data.ntn} onChange={e => form.setData('ntn', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXXXX-X" type="text"/>
-        {form.errors.client_type && <p className="text-error text-label-sm">{form.errors.client_type}</p>}
+        {/* FIX 2: Corrected error binding from client_type to ntn */}
+        {form.errors.ntn && <p className="text-error text-label-sm">{form.errors.ntn}</p>}
     </div>
 ) : (
     <div className="space-y-2">
@@ -133,8 +135,10 @@ bg-white border border-outline-variant rounded-lg
 focus:ring-2 focus:ring-primary/20 focus:border-primary 
 outline-none transition-all font-body-md text-body-md appearance-none">
     
-<option >Select City</option>
-<option>Karachi</option>
+<option value="">Select City</option>
+<option value="Karachi">Karachi</option>
+<option value="Lahore">Lahore</option>
+<option value="Islamabad">Islamabad</option>
 
 </select>
 {form.errors.city && <p className="text-error text-label-sm">{form.errors.city}</p>}
@@ -166,12 +170,17 @@ placeholder="Full postal address" rows="3"></textarea>
 </div>
 
 <div className="px-8 py-6 border-t border-outline-variant bg-surface-container-lowest flex justify-end gap-3 sticky bottom-0">
-<button onClick={onClose} className="px-6 py-2.5 border border-outline-variant text-secondary hover:bg-surface-container-low rounded-lg font-label-md text-label-md transition-all">
+<button onClick={onClose} type="button" className="px-6 py-2.5 border border-outline-variant text-secondary hover:bg-surface-container-low rounded-lg font-label-md text-label-md transition-all">
                     Cancel
                 </button>
-<button onClick={handleSubmit} className="px-8 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all">
-                    {client ? 'Update Client' : 'Save Client'}
-                </button>
+{/* FIX 3: Added physical disabled state to lock click events while submitting */}
+<button 
+    onClick={handleSubmit} 
+    disabled={form.processing}
+    className="px-8 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
+>
+    {form.processing ? 'Saving...' : (client ? 'Update Client' : 'Save Client')}
+</button>
 </div>
 </div>
 </div>
