@@ -20,8 +20,8 @@ class ProductController extends Controller
             'business_id' => 'nullable',
             'name' => 'string|required',
             'description' => 'string|nullable',
-            'unit_price' => 'decimal:2|required',
-            'tax_rate' => 'decimal:2|required',
+            'unit_price' => 'numeric|required',
+            'tax_rate' => 'numeric|required',
             'unit' => 'string|required',
             'is_active' => 'boolean'
 
@@ -36,8 +36,8 @@ class ProductController extends Controller
             'business_id' => 'nullable',
             'name' => 'string|required',
             'description' => 'string|nullable',
-            'unit_price' => 'decimal:2|required',
-            'tax_rate' => 'decimal:2|required',
+            'unit_price' => 'numeric|required',
+            'tax_rate' => 'numeric|required',
             'unit' => 'string|required',
             'is_active' => 'boolean'
 
