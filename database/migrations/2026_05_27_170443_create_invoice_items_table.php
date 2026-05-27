@@ -22,7 +22,6 @@ return new class extends Migration
             $table->decimal('amount',15,2);
             $table->decimal('tax',15,2);
             $table->decimal('total',15,2);
-            
             $table->timestamps();
         });
     }
