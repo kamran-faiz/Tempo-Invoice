@@ -2,6 +2,7 @@ import React from 'react'
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout'
 import { useState } from 'react'
 import ProductModal from '../../Components/ProductModal'
+import { router } from '@inertiajs/react'
 
 const Index = ({ products }) => {
   // FIX 2: Renamed state storage engine to correctly reflect product models
@@ -13,6 +14,10 @@ const Index = ({ products }) => {
     setShowModal(false);
     setSelectedProduct(null);
   };
+    const deleteProduct = (id) =>{
+      if(!confirm('Are you sure you want to delete this product?')) return;
+      router.delete(route('products.destroy',id))
+    }
 
   return (
     <AuthenticatedLayout title="Products List">
@@ -86,6 +91,7 @@ const Index = ({ products }) => {
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         
                         {/* FIX 1: Fixed handler referencing variables correctly */}
+                        <button onClick={() => deleteProduct(product.id)} className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="delete">delete</span></button>
                         <button 
                           onClick={() => { setSelectedProduct(product); setShowModal(true); }} 
                           className="p-1.5 hover:bg-surface-container-high rounded text-on-surface-variant" 
@@ -94,9 +100,7 @@ const Index = ({ products }) => {
                           <span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
                         </button>
                         
-                        <button className="p-1.5 hover:bg-surface-container-high rounded text-on-surface-variant" title="Toggle Status">
-                          <span className="material-symbols-outlined text-[20px]" data-icon="toggle_on">toggle_on</span>
-                        </button>
+                        
                       </div>
                     </td>
                   </tr>
