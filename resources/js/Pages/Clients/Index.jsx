@@ -21,7 +21,7 @@ const Index = ({clients}) => {
 <div className="flex justify-between items-center">
 <div className="flex items-center gap-3">
 <h3 className="font-headline-md text-headline-md text-on-surface">All Clients</h3>
-<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded">124 clients</span>
+<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded">{clients.length}clients</span>
 </div>
 <div className="flex items-center gap-4">
 <div className="relative">
