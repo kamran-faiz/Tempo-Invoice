@@ -12,8 +12,16 @@ class InvoiceController extends Controller
 {
     public function index(){
         $invoice = $invoice = Invoice::with('client:id,name')->get();
-        return Inertia::render('Invoice/Index', [
+        $metrics = [
+            'total billed' => Invoice::sum('total'),
+            'total collected' => Invoice::where('payment_status', 'paid')->sum('total'),
+            'total outstanding' => Invoice::whereIn('payment_status',['unpaid', 'overdue'])->sum('total'),
+            'fbr unsumbitted' => Invoice::whereIn('fbr_status',['pending','rejected'])->count(),
+
+        ];
+        return Inertia::render('Invoices/Index', [
             'invoice' => $invoice,
+            'metrics' => $metrics,
         ]); 
     }
 
