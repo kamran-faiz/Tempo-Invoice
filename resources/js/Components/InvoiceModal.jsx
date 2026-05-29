@@ -22,6 +22,16 @@ export default function InvoiceModal({show,onClose,invoice}) {
     }))
   : [{ id: null, product_id: '', product_name: '', quantity: 1, unit_price: 0, tax_rate: 18 }]
   })
+  const updateInvoiceRow = (index, column, newValue) => {
+    // 1. Grab a copy of the current list of items
+    const freshList = [...form.data.items];
+
+    // 2. Go to the exact row number, find the column, and change it
+    freshList[index][column] = newValue;
+
+    // 3. Tell the Inertia form to use this fresh list now
+    form.setData('items', freshList);
+};
     return (
          <>
 {show && (
@@ -99,25 +109,36 @@ export default function InvoiceModal({show,onClose,invoice}) {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-outline-variant">
-                                        {/* Row 1 */}
-                                        <tr className="group">
+                                        {form.data.items.map((item,index) => (
+                                        
+                                        <tr key={index} className="group">
                                             <td className="py-4 pr-4">
-                                                <select className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" defaultValue="Cloud Infrastructure">
+                                                <select value={item.product_id}
+                                                onChange={e => updateInvoiceRow(index, 'product_id' , e.target.value)} className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" >
                                                     <option>Cloud Infrastructure</option>
                                                     <option>Security Audit</option>
                                                 </select>
                                             </td>
                                             <td className="py-4 px-4">
-                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="text" defaultValue="Monthly hosting fee"/>
+                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="text" 
+                                                value={item.product_name}
+                                                onChange={e => updateInvoiceRow(index, 'product_name' , e.target.value)}/>
                                             </td>
                                             <td className="py-4 px-4">
-                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="number" defaultValue="1"/>
+                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="number" 
+                                                value={item.quantity}
+                                                onChange={e => updateInvoiceRow(index, 'quantity', e.target.value)}/>
                                             </td>
                                             <td className="py-4 px-4">
-                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="number" defaultValue="12000"/>
+                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="number" 
+                                                value={item.unit_price}
+                                                onChange={e => updateInvoiceRow(index, 'unit_price', e.target.value)}
+                                                />
                                             </td>
                                             <td className="py-4 px-4">
-                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="number" defaultValue="18"/>
+                                                <input className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" type="number" 
+                                                value={item.tax_rate}
+                                                onChange={e => updateInvoiceRow(index, 'tax_rate' , e.target.value)}/>
                                             </td>
                                             <td className="py-4 pl-4 text-right font-body-md">14,160</td>
                                             <td className="py-4 pl-4 text-center">
@@ -126,6 +147,7 @@ export default function InvoiceModal({show,onClose,invoice}) {
                                                 </button>
                                             </td>
                                         </tr>
+                                       ))}
                                       
                                     </tbody>
                                 </table>
@@ -140,7 +162,8 @@ export default function InvoiceModal({show,onClose,invoice}) {
                         <section className="grid grid-cols-1 md:grid-cols-2 gap-10">
                             <div className="space-y-4">
                                 <label className="block font-label-md text-label-md text-on-surface-variant">Notes</label>
-                                <textarea className="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Optional notes to client..." rows={4}></textarea>
+                                <textarea value={form.data.notes} 
+                                onChange={ e => form.setData('notes' , e.target.value)}className="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Optional notes to client..." rows={4}></textarea>
                             </div>
                             <div className="bg-surface-container-low rounded-xl p-6 space-y-3">
                                 <div className="flex justify-between font-body-md">
