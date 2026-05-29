@@ -32,6 +32,41 @@ export default function InvoiceModal({show,onClose,invoice}) {
     // 3. Tell the Inertia form to use this fresh list now
     form.setData('items', freshList);
 };
+const addInvoiceRow = () => {
+    form.setData('items' , [
+     ...form.data.items,
+     { id: null, product_id: '', product_name: '', quantity: 1, unit_price: 0, tax_rate: 18 }
+    ])
+}
+const removeInvoiceRow = (indexToRemove) => {
+    if(form.data.items.length > 1){
+        const freshList = form.data.items.filter((_, index) => index !== indexToRemove);
+        form.setData('items',freshList);
+    }
+};
+const computedItems = form.data.items.map((item) => {
+    // 1. Convert inputs safely to numbers
+    const qty = parseFloat(item.quantity) || 0;
+    const price = parseFloat(item.unit_price) || 0;
+    const taxPercent = parseFloat(item.tax_rate) || 0;
+
+    // 2. Run the math sequentially
+    const amount = qty * price;
+    const tax = amount * (taxPercent / 100);
+    const total = amount + tax;
+
+    // 3. Return a combined object containing original data + calculated values
+    return {
+        ...item,
+        amount,
+        tax,
+        total
+    };
+});
+const globalAmount = computedItems.reduce((sum, item) => sum + item.amount, 0);
+const globalTax = computedItems.reduce((sum, item) => sum + item.tax, 0);
+const globalTotal = globalAmount + globalTax;
+
     return (
          <>
 {show && (
@@ -109,7 +144,7 @@ export default function InvoiceModal({show,onClose,invoice}) {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-outline-variant">
-                                        {form.data.items.map((item,index) => (
+                                        {computedItems.map((item,index) => (
                                         
                                         <tr key={index} className="group">
                                             <td className="py-4 pr-4">
@@ -140,9 +175,9 @@ export default function InvoiceModal({show,onClose,invoice}) {
                                                 value={item.tax_rate}
                                                 onChange={e => updateInvoiceRow(index, 'tax_rate' , e.target.value)}/>
                                             </td>
-                                            <td className="py-4 pl-4 text-right font-body-md">14,160</td>
+                                            <td className="py-4 pl-4 text-right font-body-md">{item.total.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                             <td className="py-4 pl-4 text-center">
-                                                <button type="button" className="text-outline hover:text-error transition-colors">
+                                                <button onClick={() => removeInvoiceRow(index)} type="button" className="text-outline hover:text-error transition-colors">
                                                     <span className="material-symbols-outlined text-lg">delete</span>
                                                 </button>
                                             </td>
@@ -152,7 +187,7 @@ export default function InvoiceModal({show,onClose,invoice}) {
                                     </tbody>
                                 </table>
                             </div>
-                            <button type="button" className="flex items-center gap-2 px-4 py-2 border border-primary text-primary font-label-md text-label-md rounded-lg hover:bg-primary/5 transition-colors">
+                            <button onClick={addInvoiceRow} type="button" className="flex items-center gap-2 px-4 py-2 border border-primary text-primary font-label-md text-label-md rounded-lg hover:bg-primary/5 transition-colors">
                                 <span className="material-symbols-outlined text-lg">add</span>
                                 Add Item
                             </button>
@@ -165,22 +200,25 @@ export default function InvoiceModal({show,onClose,invoice}) {
                                 <textarea value={form.data.notes} 
                                 onChange={ e => form.setData('notes' , e.target.value)}className="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Optional notes to client..." rows={4}></textarea>
                             </div>
-                            <div className="bg-surface-container-low rounded-xl p-6 space-y-3">
-                                <div className="flex justify-between font-body-md">
-                                    <span className="text-on-surface-variant">Subtotal</span>
-                                    <span>PKR 37,000.00</span>
-                                </div>
-                                <div className="flex justify-between font-body-md">
-                                    <span className="text-on-surface-variant">Tax Total (18%)</span>
-                                    <span>PKR 6,660.00</span>
-                                </div>
-                                <div className="pt-3 border-t border-outline-variant flex justify-between items-center">
-                                    <span className="font-headline-md text-headline-md text-on-surface">Grand Total</span>
-                                    <span className="font-display-lg text-display-lg text-primary">PKR 43,660.00</span>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
+                           <div className="bg-surface-container-low rounded-xl p-6 space-y-3">
+                            <div className="flex justify-between font-body-md">
+                              <span className="text-on-surface-variant">Subtotal</span>
+                                  {/* Replace static 37,000.00 */}
+                              <span>PKR {globalAmount.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                           </div>
+                     <div className="flex justify-between font-body-md">
+                     <span className="text-on-surface-variant">Tax Total</span>
+                      {/* Replace static 6,660.00 */}
+                            <span>PKR {globalTax.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      </div>
+    <div className="pt-3 border-t border-outline-variant flex justify-between items-center">
+        <span className="font-headline-md text-headline-md text-on-surface">Grand Total</span>
+        {/* Replace static 43,660.00 */}
+        <span className="font-display-lg text-display-lg text-primary">
+            PKR {globalTotal.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </span>
+    </div>
+</div>
                     
                     {/* Right Column (Sidebar/Summary) */}
                     <div className="w-full md:w-80 space-y-6">
@@ -214,7 +252,7 @@ export default function InvoiceModal({show,onClose,invoice}) {
                             <h4 className="font-label-md text-label-md font-bold text-on-surface">Summary</h4>
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <span classNameName="font-label-sm text-label-sm text-on-surface-variant">Created By</span>
+                                    <span className="font-label-sm text-label-sm text-on-surface-variant">Created By</span>
                                     <span className="font-label-md text-label-md">Ali Khan</span>
                                 </div>
                                 <div className="flex justify-between items-center">
