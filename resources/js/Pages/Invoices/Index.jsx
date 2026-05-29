@@ -3,8 +3,11 @@ import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import {useState} from 'react'
 import InvoiceModal from '../../Components/InvoiceModal'
 
-const Index = () => {
+const Index = ({invoice = [], metrics = {}}) => {
     const [showModal,setShowModal] = useState(false)
+    const [selectedInvoice, setSelectedInvoice] = useState(null);
+const [activeFilter, setActiveFilter] = useState('All');
+const [searchQuery, setSearchQuery] = useState('');
   return (
     <AuthenticatedLayout title="Invoices">
     
@@ -38,19 +41,19 @@ const Index = () => {
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 <div className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
 <p className="text-on-surface-variant text-label-sm font-label-sm mb-1 uppercase tracking-wider">Total Billed (Month)</p>
-<p className="text-headline-md font-headline-md text-on-surface">PKR 1,420,000</p>
+<p className="text-headline-md font-headline-md text-on-surface">{metrics['total billed']}</p>
 </div>
 <div className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
 <p className="text-on-surface-variant text-label-sm font-label-sm mb-1 uppercase tracking-wider">Total Collected</p>
-<p className="text-headline-md font-headline-md text-tertiary">PKR 980,500</p>
+<p className="text-headline-md font-headline-md text-tertiary">{metrics['total collected']}</p>
 </div>
 <div className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
 <p className="text-on-surface-variant text-label-sm font-label-sm mb-1 uppercase tracking-wider">Outstanding Amount</p>
-<p className="text-headline-md font-headline-md text-error">PKR 439,500</p>
+<p className="text-headline-md font-headline-md text-error">{metrics['total outstanding']}</p>
 </div>
 <div className="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
 <p className="text-on-surface-variant text-label-sm font-label-sm mb-1 uppercase tracking-wider">FBR Unsubmitted</p>
-<p className="text-headline-md font-headline-md text-primary">12 Invoices</p>
+<p className="text-headline-md font-headline-md text-primary">{metrics['fbr unsumbitted']}</p>
 </div>
 </div>
 {/* <!-- Invoices Table Container --> */}
@@ -71,24 +74,24 @@ const Index = () => {
 </tr>
 </thead>
 <tbody className="divide-y divide-outline-variant">
-{/* <!-- Row 1 --> */}
-<tr className="hover:bg-surface-container transition-colors group">
-<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">INV-402</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface">Indus Tech Solutions</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">May 10, 2026</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Jun 10, 2026</td>
-<td className="px-6 py-4 font-body-md text-body-md">PKR 250,000</td>
-<td className="px-6 py-4 font-body-md text-body-md text-right">PKR 42,500</td>
-<td className="px-6 py-4 font-body-md text-body-md text-right font-semibold">PKR 292,500</td>
+{invoice.map((item) => (
+<tr key={item.id} className="hover:bg-surface-container transition-colors group">
+<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">{item.invoice_number}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface">{item.client?.name}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{item.issue_date}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{item.due_date}</td>
+<td className="px-6 py-4 font-body-md text-body-md">{item.amount}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-right">{item.tax}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-right font-semibold">{item.total}</td>
 <td className="px-6 py-4">
-<span className="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-label-sm font-medium">Paid</span>
+<span className="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-label-sm font-medium">{item.payment_status}</span>
 </td>
 <td className="px-6 py-4">
 <div className="flex items-center gap-1.5 text-tertiary">
 <span className="material-symbols-outlined text-[16px]" data-icon="check_circle" style={{ fontVariationSettings: "'FILL' 1" }}
 
 >check_circle</span>
-<span className="text-label-sm font-medium">Validated</span>
+<span className="text-label-sm font-medium">{item.fbr_status}</span>
 </div>
 </td>
 <td className="px-6 py-4 text-center">
@@ -97,7 +100,7 @@ const Index = () => {
 </tr>
 
 
-
+))}
 </tbody>
 </table>
 {/* <!-- Pagination --> */}
@@ -119,7 +122,7 @@ const Index = () => {
 </div>
 </div>
 </div>
-<InvoiceModal show={showModal} onClose={() => setShowModal(false)}/>
+<InvoiceModal show={showModal} invoice={selectedInvoice} onClose={() => setShowModal(false)}/>
 
 </AuthenticatedLayout>
   )

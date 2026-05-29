@@ -3,7 +3,7 @@ import { useForm } from '@inertiajs/react';
 
 export default function InvoiceModal({ show, onClose, invoice }) {
   // Determine mode dynamically based on presence of invoice ID
-  const isEditMode = !!(invoice?.id || form?.data?.id);
+  const isEditMode = !!invoice?.id;
 
   const form = useForm({
     id: invoice?.id || null,
@@ -28,13 +28,8 @@ export default function InvoiceModal({ show, onClose, invoice }) {
   });
 
   const updateInvoiceRow = (index, column, newValue) => {
-    // 1. Grab a copy of the current list of items
     const freshList = [...form.data.items];
-
-    // 2. Go to the exact row number, find the column, and change it
     freshList[index][column] = newValue;
-
-    // 3. Tell the Inertia form to use this fresh list now
     form.setData('items', freshList);
   };
 
@@ -53,17 +48,14 @@ export default function InvoiceModal({ show, onClose, invoice }) {
   };
 
   const computedItems = form.data.items.map((item) => {
-    // 1. Convert inputs safely to numbers
     const qty = parseFloat(item.quantity) || 0;
     const price = parseFloat(item.unit_price) || 0;
     const taxPercent = parseFloat(item.tax_rate) || 0;
 
-    // 2. Run the math sequentially
     const amount = qty * price;
     const tax = amount * (taxPercent / 100);
     const total = amount + tax;
 
-    // 3. Return a combined object containing original data + calculated values
     return {
       ...item,
       amount,
@@ -76,6 +68,30 @@ export default function InvoiceModal({ show, onClose, invoice }) {
   const globalTax = computedItems.reduce((sum, item) => sum + item.tax, 0);
   const globalTotal = globalAmount + globalTax;
 
+  const submit = (e) => {
+    e.preventDefault();
+
+    // 1. This intercepts the data and adds the missing totals Laravel is looking for
+    form.transform((data) => ({
+        ...data,
+        amount: globalAmount,
+        tax: globalTax,
+        total: globalTotal,
+        items: computedItems // Sends items WITH their individual row calculations
+    }));
+
+    // 2. Now when this fires, Laravel's validation passes with flying colors!
+    if (isEditMode) {
+        form.put(route('invoices.update', form.data.id), {
+            onSuccess: () => onClose(),
+        });
+    } else {
+        form.post(route('invoices.store'), {
+            onSuccess: () => onClose(),
+        });
+    }
+};
+
   return (
     <>
       {show && (
@@ -83,15 +99,18 @@ export default function InvoiceModal({ show, onClose, invoice }) {
           {/* Backdrop */}
           <div className="absolute inset-0 bg-on-background/60 backdrop-blur-sm" onClick={onClose}></div>
           
-          {/* Modal Card */}
-          <div className="relative w-full max-w-5xl bg-surface-container-lowest rounded-xl border border-outline-variant shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-2rem)]">
+          {/* Modal Card Form */}
+          <form 
+            onSubmit={submit} 
+            className="relative w-full max-w-5xl bg-surface-container-lowest rounded-xl border border-outline-variant shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-2rem)]"
+          >
               
               {/* Modal Header */}
               <div className="px-8 py-5 border-b border-outline-variant flex justify-between items-center bg-surface-bright">
                   <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">
                     {isEditMode ? 'Edit Invoice' : 'Create Invoice'}
                   </h2>
-                  <button onClick={onClose} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors">
+                  <button type="button" onClick={onClose} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors">
                       <span className="material-symbols-outlined">close</span>
                   </button>
               </div>
@@ -113,6 +132,7 @@ export default function InvoiceModal({ show, onClose, invoice }) {
                                     className="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" 
                                     placeholder="Search client..." 
                                     type="text"
+                                    required
                                   />
                                   <span className="material-symbols-outlined absolute right-3 top-3 text-outline">search</span>
                               </div>
@@ -135,6 +155,7 @@ export default function InvoiceModal({ show, onClose, invoice }) {
                                 onChange={e => form.setData('issue_date', e.target.value)} 
                                 className="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-2 focus:ring-primary outline-none" 
                                 type="date"
+                                required
                               />
                           </div>
                           <div>
@@ -144,6 +165,7 @@ export default function InvoiceModal({ show, onClose, invoice }) {
                                 onChange={e => form.setData('due_date', e.target.value)} 
                                 className="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-2 focus:ring-primary outline-none" 
                                 type="date"
+                                required
                               />
                           </div>
                       </section>
@@ -172,6 +194,7 @@ export default function InvoiceModal({ show, onClose, invoice }) {
                                                 value={item.product_id}
                                                 onChange={e => updateInvoiceRow(index, 'product_id', e.target.value)} 
                                                 className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none"
+                                                required
                                               >
                                                   <option value="">Select Product...</option>
                                                   <option value="1">Cloud Infrastructure</option>
@@ -190,24 +213,31 @@ export default function InvoiceModal({ show, onClose, invoice }) {
                                               <input 
                                                 className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" 
                                                 type="number" 
+                                                min="1"
                                                 value={item.quantity}
                                                 onChange={e => updateInvoiceRow(index, 'quantity', e.target.value)}
+                                                required
                                               />
                                           </td>
                                           <td className="py-4 px-4">
                                               <input 
                                                 className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" 
                                                 type="number" 
+                                                step="0.01"
+                                                min="0"
                                                 value={item.unit_price}
                                                 onChange={e => updateInvoiceRow(index, 'unit_price', e.target.value)}
+                                                required
                                               />
                                           </td>
                                           <td className="py-4 px-4">
                                               <input 
                                                 className="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 font-body-md outline-none" 
                                                 type="number" 
+                                                min="0"
                                                 value={item.tax_rate}
                                                 onChange={e => updateInvoiceRow(index, 'tax_rate', e.target.value)}
+                                                required
                                               />
                                           </td>
                                           <td className="py-4 pl-4 text-right font-body-md">
@@ -315,13 +345,17 @@ export default function InvoiceModal({ show, onClose, invoice }) {
                   <button type="button" className="px-6 py-2.5 border border-primary text-primary font-label-md text-label-md rounded-lg hover:bg-primary/5 transition-colors">
                       Save as Draft
                   </button>
-                  <button type="button" className="px-8 py-2.5 bg-primary text-on-primary font-label-md text-label-md font-bold rounded-lg hover:opacity-90 shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+                  <button 
+                      type="submit" 
+                      disabled={form.processing} 
+                      className="px-8 py-2.5 bg-primary text-on-primary font-label-md text-label-md font-bold rounded-lg hover:opacity-90 shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
+                  >
                       <span className="material-symbols-outlined text-lg">send</span>
                       {isEditMode ? 'Update & Resubmit' : 'Save & Submit to FBR'}
                   </button>
               </div>
               
-          </div>
+          </form>
         </div>
       )}
     </>
