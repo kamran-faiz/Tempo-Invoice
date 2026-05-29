@@ -119,7 +119,7 @@ const Index = () => {
 </div>
 </div>
 </div>
-<InvoiceModal show={showModal}/>
+<InvoiceModal show={showModal} onClose={() => setShowModal(false)}/>
 
 </AuthenticatedLayout>
   )
