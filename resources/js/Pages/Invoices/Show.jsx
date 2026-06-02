@@ -1,10 +1,11 @@
 import React from 'react'
+import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 
-const Show = () => {
+const Show = ({invoice}) => {
   return (
     <AuthenticatedLayout title="Invoice Details">
     {/* // <!-- Canvas Content --> */}
-<div className="p-8 max-w-[1440px] mx-auto w-full grid grid-cols-12 gap-gutter">
+<div className="p-8 max-w-[1440px] mx-auto w-full grid grid-cols-12 gap-gutter ">
 {/* <!-- Left Column: The Invoice Document --> */}
 <div className="col-span-12 lg:col-span-8">
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-10 shadow-sm">
@@ -20,8 +21,8 @@ const Show = () => {
 <p className="text-label-sm text-on-surface-variant">Precision Fintech Solutions</p>
 </div>
 <div className="text-right">
-<h3 className="font-display-lg text-display-lg text-on-surface">INV-047</h3>
-<p className="text-label-md text-on-surface-variant">FBR IRN: IRN-92837465</p>
+<h3 className="font-display-lg text-display-lg text-on-surface">Invoice Number</h3>
+<p className="text-label-md text-on-surface-variant">{invoice?.invoice_number}</p>
 <div className="mt-4 flex justify-end">
 <div className="w-24 h-24 border border-outline-variant p-1 bg-white">
 <img alt="FBR QR Code" className="w-full h-full object-contain" data-alt="A high-resolution, sharp QR code graphic placed on a white background. The QR code represents digital validation data for a Pakistani federal tax invoice. It is minimalist and functional, designed to be scanned by mobile devices for immediate verification of invoice authenticity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGBz6N529V-4ggzKJfQfNUkKQ0l4wOUWUmwe4JxOtK0g9LAO667tdCMGyZKKS4vlN-2puwSbewShHEPMItdhgVC2_0RCtuRJJuYfGyrx5ymp0Cn2R4J4FG1joZgORyDv7nhsavOO_kItPS-uFldL4nJ9uTP41UeNVwP8A3yDVdKBiK7mtjhxtb-Zdh5zPpp4M7ow9T261uPIurQl9wWk1TN54-g97jzD3Ge5JgzN3CB8MCCqQraOVaHgaefRhUN4_gI2YSGI51mI-R"/>
@@ -39,32 +40,32 @@ const Show = () => {
 </div>
 <div className="text-right lg:text-left">
 <p className="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">To</p>
-<h4 className="font-headline-md text-headline-md text-on-surface">Blue Wave Textiles</h4>
-<p className="font-body-md text-body-md text-on-surface-variant">Lahore, Punjab, Pakistan</p>
-<p className="font-body-md text-body-md text-on-surface-variant">NTN: 8765432-1</p>
+<h4 className="font-headline-md text-headline-md text-on-surface">{invoice?.client?.name}</h4>
+<p className="font-body-md text-body-md text-on-surface-variant">{invoice?.client?.address}</p>
+<p className="font-body-md text-body-md text-on-surface-variant">{invoice?.client?.ntn ? `NTN: ${invoice?.client?.ntn}` : `CNIC: ${invoice?.client?.cnic || 'N/A'}`}</p>
 </div>
 </div>
 {/* <!-- Meta Information Row --> */}
 <div className="grid grid-cols-4 gap-4 mb-10 bg-surface-container-low p-4 rounded-lg">
 <div>
 <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">Issue Date</p>
-<p className="font-body-lg text-body-lg font-semibold">May 10, 2026</p>
+<p className="font-body-lg text-body-lg font-semibold">{invoice?.issue_date}</p>
 </div>
 <div>
 <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">Due Date</p>
-<p className="font-body-lg text-body-lg font-semibold">June 10, 2026</p>
+<p className="font-body-lg text-body-lg font-semibold">{invoice?.due_date}</p>
 </div>
 <div>
 <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">Payment Status</p>
 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-container text-on-error-container">
-                                Unpaid
+                                {invoice?.payment_status}
                             </span>
 </div>
 <div>
 <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">FBR Status</p>
 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-tertiary-fixed text-on-tertiary-fixed">
 <span className="material-symbols-outlined text-[14px] mr-1" data-icon="verified">verified</span>
-                                Validated
+                                {invoice?.fbr_status}
                             </span>
 </div>
 </div>
