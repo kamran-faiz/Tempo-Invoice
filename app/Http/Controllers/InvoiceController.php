@@ -120,5 +120,14 @@ class InvoiceController extends Controller
     $invoice->delete();         
 });
     }
+    public function show(Invoice $invoice)
+{
+   
+    $invoice->load(['client', 'items']);
+
+    return Inertia::render('Invoices/Show', [
+        'invoice' => $invoice
+    ]);
+}
     }
 

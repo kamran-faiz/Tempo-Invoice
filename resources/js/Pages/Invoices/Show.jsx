@@ -2,7 +2,8 @@ import React from 'react'
 
 const Show = () => {
   return (
-    // <!-- Canvas Content -->
+    <AuthenticatedLayout title="Invoice Details">
+    {/* // <!-- Canvas Content --> */}
 <div className="p-8 max-w-[1440px] mx-auto w-full grid grid-cols-12 gap-gutter">
 {/* <!-- Left Column: The Invoice Document --> */}
 <div className="col-span-12 lg:col-span-8">
@@ -229,6 +230,7 @@ const Show = () => {
 </div>
 </div>
 </div>
+</AuthenticatedLayout>
   )
 }
 

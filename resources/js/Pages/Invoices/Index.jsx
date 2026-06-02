@@ -4,6 +4,7 @@ import { useState } from 'react'
 import InvoiceModal from '../../Components/InvoiceModal'
 import { router } from '@inertiajs/react'
 
+
 const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
     const [showModal, setShowModal] = useState(false)
     const [selectedInvoice, setSelectedInvoice] = useState(null)
@@ -49,6 +50,11 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
             minimumFractionDigits: 0
         }).format(value || 0);
     }
+  
+    const showInvoice = (id) => {
+        router.get(route('invoices.show',id))
+    }
+
 
     return (
         <AuthenticatedLayout title="Invoices">
@@ -167,6 +173,11 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <div className="flex items-center justify-center gap-2">
+                                                <button onClick={showInvoice(item.id)}
+                                             className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-on-surface-variant"
+                                                  >
+                                            <span className="material-symbols-outlined text-[18px]">visibility</span>
+                                        </button>
                                                 <button 
                                                     onClick={() => handleEditOpen(item)}
                                                     className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-primary"
