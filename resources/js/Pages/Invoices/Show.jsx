@@ -84,37 +84,21 @@ const Show = ({invoice}) => {
 <th className="py-3 font-label-sm text-label-sm text-on-surface-variant text-right">Total</th>
 </tr>
 </thead>
+
 <tbody className="divide-y divide-outline-variant">
-<tr className="hover:bg-surface-container-low transition-colors">
-<td className="py-4 font-body-md text-body-md">1</td>
-<td className="py-4 font-body-md text-body-md font-semibold">Cloud Infrastructure</td>
-<td className="py-4 font-body-md text-body-md text-on-surface-variant">Monthly</td>
-<td className="py-4 font-body-md text-body-md text-right">1</td>
-<td className="py-4 font-body-md text-body-md text-right">14,160</td>
-<td className="py-4 font-body-md text-body-md text-right">18%</td>
-<td className="py-4 font-body-md text-body-md text-right">2,548.80</td>
-<td className="py-4 font-body-md text-body-md text-right font-semibold">16,708.80</td>
+{invoice?.items.map((item,index) => (
+<tr key={item.id}  className="hover:bg-surface-container-low transition-colors">
+<td className="py-4 font-body-md text-body-md">{index + 1}</td>
+<td className="py-4 font-body-md text-body-md font-semibold">{item.product_name}</td>
+<td className="py-4 font-body-md text-body-md text-on-surface-variant">{item.description}</td>
+<td className="py-4 font-body-md text-body-md text-right">{item.quantity}</td>
+<td className="py-4 font-body-md text-body-md text-right">{item.unit_price}</td>
+<td className="py-4 font-body-md text-body-md text-right">{item.tax_rate}</td>
+<td className="py-4 font-body-md text-body-md text-right">{item.tax}</td>
+<td className="py-4 font-body-md text-body-md text-right font-semibold">{item.total}</td>
 </tr>
-<tr className="hover:bg-surface-container-low transition-colors">
-<td className="py-4 font-body-md text-body-md">2</td>
-<td className="py-4 font-body-md text-body-md font-semibold">Security Audit</td>
-<td className="py-4 font-body-md text-body-md text-on-surface-variant">Quarterly</td>
-<td className="py-4 font-body-md text-body-md text-right">2</td>
-<td className="py-4 font-body-md text-body-md text-right">29,500</td>
-<td className="py-4 font-body-md text-body-md text-right">18%</td>
-<td className="py-4 font-body-md text-body-md text-right">10,620.00</td>
-<td className="py-4 font-body-md text-body-md text-right font-semibold">69,620.00</td>
-</tr>
-<tr className="hover:bg-surface-container-low transition-colors">
-<td className="py-4 font-body-md text-body-md">3</td>
-<td className="py-4 font-body-md text-body-md font-semibold">Technical Support</td>
-<td className="py-4 font-body-md text-body-md text-on-surface-variant">Hourly</td>
-<td className="py-4 font-body-md text-body-md text-right">5</td>
-<td className="py-4 font-body-md text-body-md text-right">5,000</td>
-<td className="py-4 font-body-md text-body-md text-right">18%</td>
-<td className="py-4 font-body-md text-body-md text-right">4,500.00</td>
-<td className="py-4 font-body-md text-body-md text-right font-semibold">29,500.00</td>
-</tr>
+))
+}
 </tbody>
 </table>
 </div>
