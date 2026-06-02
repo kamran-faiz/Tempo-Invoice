@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Invoice;
+use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
     public function index(){
-        $invoice = $invoice = Invoice::with('client:id,name')->get();
+        $invoice = $invoice = Invoice::with(['client:id,name','items'])->get();
+        $clients = Client::select('id', 'name')->orderBy('name', 'asc')->get();
+        $products = Product::select('id', 'name', 'unit_price')->orderBy('name', 'asc')->get();
         $metrics = [
             'total billed' => Invoice::sum('total'),
             'total collected' => Invoice::where('payment_status', 'paid')->sum('total'),
@@ -22,6 +25,8 @@ class InvoiceController extends Controller
         return Inertia::render('Invoices/Index', [
             'invoice' => $invoice,
             'metrics' => $metrics,
+            'clients' => $clients,
+            'products' => $products
         ]); 
     }
 
