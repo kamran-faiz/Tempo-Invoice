@@ -58,7 +58,7 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
 
     return (
         <AuthenticatedLayout title="Invoices">
-            <div className="max-w-[1200px] mx-auto space-y-8">
+            <div className="max-w-[1200px] mx-auto space-y-8 mt-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <h1 className="font-headline-lg text-headline-lg text-on-surface">All Invoices</h1>
@@ -173,7 +173,7 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <div className="flex items-center justify-center gap-2">
-                                                <button onClick={showInvoice(item.id)}
+                                                <button onClick={() => showInvoice(item.id)}
                                              className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-on-surface-variant"
                                                   >
                                             <span className="material-symbols-outlined text-[18px]">visibility</span>

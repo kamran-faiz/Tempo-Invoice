@@ -1,5 +1,6 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
+import { Link } from '@inertiajs/react'
 
 const Show = ({invoice}) => {
     const subTotal = invoice?.items?.reduce((sum , item) => sum + (item.quantity * item.unit_price) , 0 || 0);
@@ -14,6 +15,14 @@ const Show = ({invoice}) => {
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-10 shadow-sm">
 {/* <!-- Invoice Header --> */}
 <div className="flex justify-between items-start mb-12">
+
+    <Link 
+    href={route('invoices.index')} 
+    className="inline-flex items-center gap-1.5 text-body-md text-primary font-medium hover:underline mb-4 group"
+  >
+    <span className="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+    Back to Invoices
+  </Link>
 <div>
 <div className="flex items-center gap-2 mb-2">
 <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary">
