@@ -2,7 +2,10 @@ import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 
 const Show = ({invoice}) => {
-  return (
+    const subTotal = invoice?.items?.reduce((sum , item) => sum + (item.quantity * item.unit_price) , 0 || 0);
+    const taxTotal = invoice?.items?.reduce((sum, item) => sum + Number(item.tax || 0), 0) || 0;
+    const grandTotal = subTotal + taxTotal;
+    return (
     <AuthenticatedLayout title="Invoice Details">
     {/* // <!-- Canvas Content --> */}
 <div className="p-8 max-w-[1440px] mx-auto w-full grid grid-cols-12 gap-gutter ">
@@ -111,15 +114,15 @@ const Show = ({invoice}) => {
 <div className="w-full md:w-64 space-y-2">
 <div className="flex justify-between font-body-md text-body-md">
 <span className="text-on-surface-variant">Subtotal</span>
-<span className="font-medium">103,160.00</span>
+<span className="font-medium">{subTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
 </div>
 <div className="flex justify-between font-body-md text-body-md">
 <span className="text-on-surface-variant">Tax Total (18%)</span>
-<span className="font-medium">17,668.80</span>
+<span className="font-medium">{taxTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
 </div>
 <div className="flex justify-between pt-3 border-t border-outline-variant">
 <span className="font-headline-md text-headline-md text-on-surface">Grand Total</span>
-<span className="font-headline-md text-headline-md text-primary">PKR 120,828.80</span>
+<span className="font-headline-md text-headline-md text-primary">{grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
 </div>
 </div>
 </div>
