@@ -21,6 +21,7 @@ class Invoice extends Model
          'fbr_status',
          'fbr_invoice_number',
          'notes',
+         'fbr_rejection_reason'
 
     ];
 

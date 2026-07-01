@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Services\FbrService;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 
@@ -128,6 +129,29 @@ class InvoiceController extends Controller
     return Inertia::render('Invoices/Show', [
         'invoice' => $invoice
     ]);
+
+   
 }
+ public function submitToFbr(Invoice $invoice)
+    {
+         $fbrService = new FbrService();
+         $invoice->load(['client', 'items']);
+         $result = $fbrService->submitInvoice($invoice);
+       if($result['success']){
+        $invoice->update([
+            'fbr_status' => 'validated',
+            'fbr_invoice_number' => $result['irn'],
+        ]);
+        return redirect()->back()->with('success', 'Invoice validated by FBR successfully');
+       }else{
+        $invoice->update([
+            'fbr_status' => 'rejected',
+            'fbr_rejection_reason' => $result['message'],
+        ]);
+        return redirect()->back()->with('error', 'Fbr has rejected your invoice' . $result['message']);
+       }
+         
+
+    }
     }
 
