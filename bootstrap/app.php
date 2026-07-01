@@ -12,10 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-    $middleware->web(append: [
-        \App\Http\Middleware\HandleInertiaRequests::class,
-    ]);
-})
+        $middleware->web(append: [
+            \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
+        $middleware->validateCsrfTokens(except: [
+            'invoices/*/submit-to-fbr'
+        ]);
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

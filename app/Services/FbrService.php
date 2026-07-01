@@ -29,12 +29,10 @@ use Illuminate\Support\Facades\Http;
    ];
    $response = Http::post(env('FBR_API_URL') . '/api/fbr/submit', $payload);
    if($response->successful()){
-     
-    return $response->json()['irn'];
-    
-   }else{
-    return $response->json()['message'];
-   }
+    return ['success' => true, 'irn' => $response->json()['irn']];
+}else{
+    return ['success' => false, 'message' => $response->json()['message']];
+}
     }
    
   }
