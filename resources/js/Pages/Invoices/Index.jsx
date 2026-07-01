@@ -192,12 +192,14 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
                                                 >
                                                     <span className="material-symbols-outlined text-[18px]">delete</span>
                                                 </button>
+                                                {item.fbr_status !== 'validated' && (
                                                 <button 
                                                     onClick={() => handleSubmit(item.id)}
-                                                    className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-error"
+                                                    className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-primary"
                                                 >
-                                                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                                                    <span className="material-symbols-outlined text-[18px]">fact_check</span>
                                                 </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>
