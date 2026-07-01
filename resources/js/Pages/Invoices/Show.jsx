@@ -1,11 +1,16 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import { Link } from '@inertiajs/react'
+import {router} from '@inertiajs/react'
 
 const Show = ({invoice}) => {
     const subTotal = invoice?.items?.reduce((sum , item) => sum + (item.quantity * item.unit_price) , 0 || 0);
     const taxTotal = invoice?.items?.reduce((sum, item) => sum + Number(item.tax || 0), 0) || 0;
     const grandTotal = subTotal + taxTotal;
+
+    const handleSubmit = () => {
+        router.post(route('invoices.submitToFbr' , {invoice : invoice.id}))
+    }
     return (
     <AuthenticatedLayout title="Invoice Details">
     {/* // <!-- Canvas Content --> */}
@@ -172,7 +177,7 @@ const Show = ({invoice}) => {
 <p className="font-mono text-sm text-on-surface break-all">IRN-92837465-PK-2026-X8B9</p>
 </div>
 </div>
-<button className="w-full py-2.5 border border-outline text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-all active:scale-95 flex items-center justify-center gap-2">
+<button onClick={handleSubmit} className="w-full py-2.5 border border-outline text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-all active:scale-95 flex items-center justify-center gap-2">
 <span className="material-symbols-outlined" data-icon="refresh">refresh</span>
                         Resubmit to FBR
                     </button>
