@@ -54,7 +54,9 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
     const showInvoice = (id) => {
         router.get(route('invoices.show',id))
     }
-
+     const handleSubmit = (id) => {
+            router.post(route('invoices.submitToFbr' , {invoice : id}))
+        }
 
     return (
         <AuthenticatedLayout title="Invoices">
@@ -186,6 +188,12 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
                                                 </button>
                                                 <button 
                                                     onClick={() => handleDeleteInvoice(item.id)}
+                                                    className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-error"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleSubmit(item.id)}
                                                     className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-error"
                                                 >
                                                     <span className="material-symbols-outlined text-[18px]">delete</span>
