@@ -68,6 +68,7 @@ const Index = ({invoices}) => {
 {/* <!-- Tabs and Filters --> */}
 <div className="px-6 py-4 border-b border-outline-variant flex flex-col md:flex-row md:items-center justify-between gap-4">
 <div className="flex gap-2 p-1 bg-surface-container-high rounded-lg w-fit">
+    
 <button className="px-6 py-1.5 rounded-md font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm">All</button>
 <button className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Validated</button>
 <button className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Rejected</button>
@@ -76,7 +77,8 @@ const Index = ({invoices}) => {
 <div className="flex items-center gap-3">
 <div className="relative">
 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90">search</span>
-<input className="pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all w-64" placeholder="Search by Invoice or IRN..." type="text"/>
+<input value={searchQuery}
+onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all w-64" placeholder="Search by Invoice or IRN..." type="text"/>
 </div>
 <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors">
 <span className="material-symbols-outlined scale-90">filter_list</span>
@@ -128,7 +130,7 @@ const Index = ({invoices}) => {
 </td>
 <td className="px-6 py-4 text-right">
     {['rejected', 'pending'].includes(item.fbr_status) ?
-        <button className="p-2 text-primary hover:bg-surface-container-high rounded-lg transition-colors">
+        <button onClick={submitToFbr} className="p-2 text-primary hover:bg-surface-container-high rounded-lg transition-colors">
             <span className="material-symbols-outlined">fact_check</span>
         </button> : null
     }
