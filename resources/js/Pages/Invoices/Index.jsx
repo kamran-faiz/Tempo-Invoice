@@ -3,6 +3,7 @@ import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import { useState } from 'react'
 import InvoiceModal from '../../Components/InvoiceModal'
 import { router } from '@inertiajs/react'
+import toast from 'react-hot-toast'
 
 
 const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
@@ -54,9 +55,12 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
     const showInvoice = (id) => {
         router.get(route('invoices.show',id))
     }
-     const handleSubmit = (id) => {
-            router.post(route('invoices.submitToFbr' , {invoice : id}))
-        }
+    const handleSubmit = (id) => {
+    router.post(route('invoices.submitToFbr', { invoice: id }), {}, {
+        onSuccess: () => toast.success('Invoice validated by FBR'),
+        onError: () => toast.error('Invoice rejected by FBR')
+    })
+}
 
     return (
         <AuthenticatedLayout title="Invoices">

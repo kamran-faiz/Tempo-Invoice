@@ -1,7 +1,9 @@
 import { usePage,Link } from '@inertiajs/react'
+import { Toaster } from 'react-hot-toast'
 export default function AuthenticatedLayout({ title, children }) {
     const { url } = usePage()
     return (
+        
         <div>
             <aside className="fixed left-0 top-0 h-full w-[240px] bg-inverse-surface flex flex-col py-6 px-4 z-50">
                 <div className="mb-10 px-2">
@@ -68,6 +70,8 @@ export default function AuthenticatedLayout({ title, children }) {
 </div>
             </header>
             <main className="ml-[240px] pt-20 p-8 min-h-screen">{children}</main>
+            <Toaster />
         </div>
+        
     )
 }

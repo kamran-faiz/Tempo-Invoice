@@ -167,25 +167,7 @@ export default function InvoiceModal({ show, onClose, invoice, clients = [], pro
                               <span className="text-error text-label-sm mt-1 block">{form.errors.client_id}</span>
                           )}
                         </div>
-                        <div className="md:col-span-1">
-                            <label className="block font-label-md text-label-md text-on-surface-variant mb-2">Invoice #</label>
-                            <input
-                              value={form.data.invoice_number}
-                              onChange={e => form.setData('invoice_number', e.target.value)} 
-                              className={`w-full border rounded-lg px-4 py-3 font-body-md outline-none transition-all ${
-                                isEditMode 
-                                  ? 'bg-surface-container border-outline-variant text-on-surface-variant cursor-not-allowed' 
-                                  : 'bg-white border-outline-variant focus:ring-2 focus:ring-primary'
-                              }`} 
-                              readOnly={isEditMode}
-                              required={!isEditMode}
-                              type="text" 
-                              placeholder={isEditMode ? "Auto-generated" : "Enter Invoice Number"}
-                            />    
-                            {form.errors.invoice_number && (
-                                <span className="text-error text-label-sm mt-1 block">{form.errors.invoice_number}</span>
-                            )}
-                        </div>
+                        
                         <div>
                             <label className="block font-label-md text-label-md text-on-surface-variant mb-2">Invoice Date</label>
                             <input

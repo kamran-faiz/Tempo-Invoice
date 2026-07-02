@@ -34,7 +34,6 @@ class InvoiceController extends Controller
     public function store(Request $request){
         $validated = $request->validate([
               'client_id'            => 'required|exists:clients,id',
-              'invoice_number'       => 'required|unique:invoices,invoice_number|string',
               'issue_date'           => 'required|date',
               'due_date'             => 'required|date|after_or_equal:issue_date',
               'amount'               => 'required|numeric|min:0',
@@ -51,6 +50,11 @@ class InvoiceController extends Controller
               'items.*.tax'          => 'required|numeric|min:0',
               'items.*.total'        => 'required|numeric|min:0',
         ]);
+        $year = date('Y');
+$count = Invoice::count();
+$sequence = str_pad($count + 1, 4, '0', STR_PAD_LEFT);
+$validated['invoice_number'] = 'INV-' . $year . '-' . $sequence;
+
         DB::transaction(function() use ($validated){
               $invoice = Invoice::create([
                    'client_id'      => $validated['client_id'],
