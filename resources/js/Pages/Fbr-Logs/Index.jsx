@@ -1,7 +1,23 @@
-import React from 'react'
-
-const Index = () => {
+import React, { useState } from 'react'
+import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
+const Index = ({invoices}) => {
+     const [invoiceModal,setInvoiceModal] = useState('false')
+     const [searchQuery, setSearchQuery] = useState('')
+    const [activeFilter,setActiveFilter] = useState('All')
+    const filteredInvoices = invoices.filter((item) => {
+    const matchesSearch = 
+        item.invoice_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.client?.name || '').toLowerCase().includes(searchQuery.toLowerCase());
+    
+    if (!matchesSearch) return false;
+    if (activeFilter === 'Validated') return item.fbr_status === 'validated';
+    if (activeFilter === 'Pending') return item.fbr_status === 'pending';
+    if (activeFilter === 'Rejected') return item.fbr_status === 'rejected';
+    return true;
+})
+        
   return (
+    <AuthenticatedLayout title="FBR Logs">
     <div>
       <div className="flex-1 p-8 space-y-8 max-w-[1440px] mx-auto w-full">
 {/* <!-- Metric Grid --> */}
@@ -218,6 +234,7 @@ const Index = () => {
 </section>
 </div>
     </div>
+    </AuthenticatedLayout>
   )
 }
 
