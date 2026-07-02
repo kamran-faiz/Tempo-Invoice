@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import {router} from '@inertiajs/react'
 import toast from 'react-hot-toast'
-const Index = ({invoices}) => {
+const Index = ({invoices , metrics}) => {
      const [invoiceModal,setInvoiceModal] = useState('false')
      const [searchQuery, setSearchQuery] = useState('')
     const [activeFilter,setActiveFilter] = useState('All')
@@ -38,7 +38,7 @@ const Index = ({invoices}) => {
 <span className="text-tertiary font-label-sm text-label-sm">+12% vs last mo</span>
 </div>
 <p className="text-on-surface-variant font-label-md text-label-md">Total Submitted</p>
-<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">1,240</h3>
+<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">{metrics['total_submitted']}</h3>
 </div>
 <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant hover:border-tertiary-container/30 transition-all group">
 <div className="flex justify-between items-start mb-4">
@@ -48,7 +48,7 @@ const Index = ({invoices}) => {
 <span className="text-tertiary font-label-sm text-label-sm">95.5% Success</span>
 </div>
 <p className="text-on-surface-variant font-label-md text-label-md">Total Validated</p>
-<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">1,185</h3>
+<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">{metrics['total_validated']}</h3>
 </div>
 <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant hover:border-error/30 transition-all group">
 <div className="flex justify-between items-start mb-4">
@@ -58,7 +58,7 @@ const Index = ({invoices}) => {
 <span className="text-error font-label-sm text-label-sm">-4% Priority</span>
 </div>
 <p className="text-on-surface-variant font-label-md text-label-md">Total Rejected</p>
-<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">12</h3>
+<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">{metrics['total_rejected']}</h3>
 </div>
 <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant hover:border-primary-container/30 transition-all group">
 <div className="flex justify-between items-start mb-4">
@@ -68,7 +68,7 @@ const Index = ({invoices}) => {
 <span className="text-on-surface-variant font-label-sm text-label-sm">Awaiting API</span>
 </div>
 <p className="text-on-surface-variant font-label-md text-label-md">Pending Submission</p>
-<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">43</h3>
+<h3 className="font-stat-lg text-stat-lg text-on-surface mt-1">{metrics['total_pending']}</h3>
 </div>
 </section>
 {/* <!-- Filter and Table Section --> */}
