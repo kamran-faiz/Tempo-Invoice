@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
+import {router} from '@inertiajs/react'
+import toast from 'react-hot-toast'
 const Index = ({invoices}) => {
      const [invoiceModal,setInvoiceModal] = useState('false')
      const [searchQuery, setSearchQuery] = useState('')
     const [activeFilter,setActiveFilter] = useState('All')
+    const handleSubmit = (id) => {
+        router.post(route('invoices.submitToFbr', { invoice: id }), {}, {
+            onSuccess: () => toast.success('Invoice validated by FBR'),
+            onError: () => toast.error('Invoice rejected by FBR')
+        })
+    }
     const filteredInvoices = invoices.filter((item) => {
     const matchesSearch = 
         item.invoice_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -69,10 +77,10 @@ const Index = ({invoices}) => {
 <div className="px-6 py-4 border-b border-outline-variant flex flex-col md:flex-row md:items-center justify-between gap-4">
 <div className="flex gap-2 p-1 bg-surface-container-high rounded-lg w-fit">
     
-<button className="px-6 py-1.5 rounded-md font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm">All</button>
-<button className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Validated</button>
-<button className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Rejected</button>
-<button className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Pending</button>
+<button onClick={() => setActiveFilter('All')} className="px-6 py-1.5 rounded-md font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm">All</button>
+<button onClick={() => setActiveFilter('Validated')} className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Validated</button>
+<button onClick={() => setActiveFilter('Rejected')} className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Rejected</button>
+<button onClick={() => setActiveFilter('Pending')} className="px-6 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface">Pending</button>
 </div>
 <div className="flex items-center gap-3">
 <div className="relative">
@@ -130,7 +138,7 @@ onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 pr-4 py-2 bg-s
 </td>
 <td className="px-6 py-4 text-right">
     {['rejected', 'pending'].includes(item.fbr_status) ?
-        <button onClick={submitToFbr} className="p-2 text-primary hover:bg-surface-container-high rounded-lg transition-colors">
+        <button onClick={() => handleSubmit(item.id)} className="p-2 text-primary hover:bg-surface-container-high rounded-lg transition-colors">
             <span className="material-symbols-outlined">fact_check</span>
         </button> : null
     }
