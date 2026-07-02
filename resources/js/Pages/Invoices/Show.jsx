@@ -74,9 +74,13 @@ const Show = ({invoice}) => {
 </div>
 <div>
 <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">Payment Status</p>
-<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-container text-on-error-container">
-                                {invoice?.payment_status}
-                            </span>
+<span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+    invoice?.payment_status === 'paid' ? 'bg-tertiary-fixed text-on-tertiary-fixed' :
+    invoice?.payment_status === 'overdue' ? 'bg-error text-on-error' :
+    'bg-error-container text-on-error-container'
+}`}>
+    {invoice?.payment_status}
+</span>
 </div>
 <div>
 <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">FBR Status</p>
@@ -123,7 +127,7 @@ const Show = ({invoice}) => {
 <div className="flex flex-col md:flex-row justify-between pt-6 border-t border-outline-variant">
 <div className="max-w-xs mb-6 md:mb-0">
 <p className="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Notes</p>
-<p className="font-body-md text-body-md text-on-surface-variant">Payment Instructions: Please pay within 30 days. Payments can be made via direct bank transfer to our corporate account.</p>
+<p className="font-body-md text-body-md text-on-surface-variant">{invoice?.notes}</p>
 </div>
 <div className="w-full md:w-64 space-y-2">
 <div className="flex justify-between font-body-md text-body-md">
@@ -168,20 +172,29 @@ const Show = ({invoice}) => {
 <span className="material-symbols-outlined" data-icon="cloud_done">cloud_done</span>
 </div>
 <div>
-<p className="font-label-md text-label-md text-on-surface font-bold">Validated by FBR</p>
+<p className="font-label-md text-label-md text-on-surface font-bold">{invoice?.fbr_status === "validated" ? 'Validated By Fbr' : invoice?.fbr_status === "rejected" ? "Rejected By Fbr" : invoice?.fbr_status === "pending" ? "Pending"
+: null}</p>
 <p className="text-label-sm text-on-surface-variant">Synced May 10, 11:42 AM</p>
 </div>
 </div>
 <div className="bg-surface-container-low p-3 rounded border border-outline-variant/30">
 <p className="text-[11px] text-on-surface-variant uppercase mb-1">Tax Invoice IRN</p>
-<p className="font-mono text-sm text-on-surface break-all">IRN-92837465-PK-2026-X8B9</p>
+<p className="font-mono text-sm text-on-surface break-all">{invoice?.fbr_invoice_number || "-"}</p>
 </div>
+{invoice?.fbr_status === 'rejected' && (
+    <div className="bg-error/10 p-3 rounded border border-error/30">
+        <p className="text-[11px] text-error uppercase mb-1">Rejection Reason</p>
+        <p className="text-sm text-error">{invoice?.fbr_rejection_reason}</p>
+    </div>
+)}
 </div>
+{['rejected', 'pending'].includes(invoice?.fbr_status) && (
 <button onClick={handleSubmit} className="w-full py-2.5 border border-outline text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-all active:scale-95 flex items-center justify-center gap-2">
 <span className="material-symbols-outlined" data-icon="refresh">refresh</span>
                         Resubmit to FBR
-                    </button>
+                </button>)}    
 </div>
+
 {/* <!-- Actions Card --> */}
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
 <h5 className="font-label-sm text-label-sm text-on-surface-variant uppercase mb-4">Quick Actions</h5>
