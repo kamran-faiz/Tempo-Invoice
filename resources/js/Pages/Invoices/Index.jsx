@@ -10,16 +10,16 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
     const [showModal, setShowModal] = useState(false)
     const [selectedInvoice, setSelectedInvoice] = useState(null)
     const [activeFilter, setActiveFilter] = useState('All')
-    const [searchQuery, setSearchQ;
-
-        if (activeFilter === 'All') return true;uery] = useState('')
+    const [searchQuery, setSearchQuery] = useState('')
 
     const filteredInvoices = invoice.filter((item) => {
         const matchesSearch = 
             item.invoice_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (item.client?.name || '').toLowerCase().includes(searchQuery.toLowerCase());
         
-        if (!matchesSearch) return false
+        if (!matchesSearch) return false;
+
+        if (activeFilter === 'All') return true;
         if (activeFilter === 'Unpaid') return item.payment_status === 'unpaid';
         if (activeFilter === 'Paid') return item.payment_status === 'paid';
         if (activeFilter === 'Overdue') return item.payment_status === 'overdue';

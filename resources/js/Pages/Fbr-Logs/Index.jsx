@@ -99,118 +99,42 @@ const Index = ({invoices}) => {
 </tr>
 </thead>
 <tbody className="divide-y divide-outline-variant">
-{/* <!-- Row 1: Validated --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
+{filteredInvoices.map((item) => (
+<tr key={item.id} className="hover:bg-surface-container-low transition-colors group">
 <td className="px-6 py-4">
-<a className="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">INV-2024-001</a>
+<a className="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">{item.invoice_number}</a>
 </td>
-<td className="px-6 py-4 font-body-md text-body-md">Apex Global Solutions</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Oct 24, 2024</td>
+<td className="px-6 py-4 font-body-md text-body-md">{item.client?.name}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{item.updated_at}</td>
 <td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-semibold">
-<span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                        Validated
-                                    </span>
+    <div className={`flex items-center gap-1.5 ${
+        item.fbr_status === 'validated' ? 'text-tertiary' :
+        item.fbr_status === 'rejected' ? 'text-error' : 'text-on-surface-variant'
+    }`}>
+        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+            {item.fbr_status === 'validated' ? 'check_circle' : 
+             item.fbr_status === 'rejected' ? 'cancel' : 'hourglass_empty'}
+        </span>
+        <span className="text-label-sm font-medium capitalize">{item.fbr_status}</span>
+    </div>
 </td>
-<td className="px-6 py-4 font-body-md text-body-md font-mono text-on-surface-variant">PK-FBR-7729102-X</td>
-<td className="px-6 py-4 text-on-surface-variant">—</td>
-<td className="px-6 py-4 text-right">
-<button className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors">
-<span className="material-symbols-outlined">more_vert</span>
-</button>
-</td>
-</tr>
-{/* <!-- Row 2: Rejected --> */}
-<tr className="hover:bg-surface-container-low transition-colors group bg-error-container/5">
-<td className="px-6 py-4">
-<a className="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">INV-2024-002</a>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md">Nexus Corp Int.</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Oct 24, 2024</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error/10 text-error font-label-sm text-label-sm font-semibold">
-<span className="material-symbols-outlined text-[14px]">error</span>
-                                        Rejected
-                                    </span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant opacity-30">—</td>
-<td className="px-6 py-4">
-<button className="font-label-sm text-label-sm text-error underline decoration-error/30 hover:decoration-error">See Reason</button>
+<td className="px-6 py-4 font-body-md text-body-md font-mono text-on-surface-variant">{item.fbr_invoice_number || '—'}</td>
+
+<td className="px-6 py-4 text-on-surface-variant">
+    {item.fbr_status === 'rejected' 
+        ? <button className="font-label-sm text-label-sm text-error underline">See Reason</button>
+        : '—'
+    }
 </td>
 <td className="px-6 py-4 text-right">
-<button className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary text-on-primary rounded-lg font-label-sm text-label-sm shadow-sm hover:bg-primary-container transition-all active:scale-95">
-<span className="material-symbols-outlined text-[16px]">fact_check</span>
-                                        Resubmit
-                                    </button>
+    {['rejected', 'pending'].includes(item.fbr_status) ?
+        <button className="p-2 text-primary hover:bg-surface-container-high rounded-lg transition-colors">
+            <span className="material-symbols-outlined">fact_check</span>
+        </button> : null
+    }
 </td>
-</tr>
-{/* <!-- Row 3: Pending --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
-<td className="px-6 py-4">
-<a className="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">INV-2024-003</a>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md">Quantum Systems</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Oct 25, 2024</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container/10 text-primary-container font-label-sm text-label-sm font-semibold">
-<span className="material-symbols-outlined text-[14px]">schedule</span>
-                                        Pending
-                                    </span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant opacity-30">—</td>
-<td className="px-6 py-4 text-on-surface-variant">—</td>
-<td className="px-6 py-4 text-right">
-<button className="inline-flex items-center gap-2 px-3 py-1.5 border border-primary text-primary rounded-lg font-label-sm text-label-sm hover:bg-primary/5 transition-all active:scale-95">
-<span className="material-symbols-outlined text-[16px]">fact_check</span>
-                                        Resubmit
-                                    </button>
-</td>
-</tr>
-{/* <!-- Row 4: Validated --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
-<td className="px-6 py-4">
-<a className="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">INV-2024-004</a>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md">Velocity Partners</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Oct 25, 2024</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-semibold">
-<span className="material-symbols-outlined text-[14px]">check_circle</span>
-                                        Validated
-                                    </span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md font-mono text-on-surface-variant">PK-FBR-7729441-A</td>
-<td className="px-6 py-4 text-on-surface-variant">—</td>
-<td className="px-6 py-4 text-right">
-<button className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors">
-<span className="material-symbols-outlined">more_vert</span>
-</button>
-</td>
-</tr>
-{/* <!-- Row 5: Rejected --> */}
-<tr className="hover:bg-surface-container-low transition-colors group bg-error-container/5">
-<td className="px-6 py-4">
-<a className="font-label-md text-label-md text-primary hover:underline font-semibold" href="#">INV-2024-005</a>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md">Silverstone Logistics</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Oct 26, 2024</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error/10 text-error font-label-sm text-label-sm font-semibold">
-<span className="material-symbols-outlined text-[14px]">error</span>
-                                        Rejected
-                                    </span>
-</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant opacity-30">—</td>
-<td className="px-6 py-4">
-<button className="font-label-sm text-label-sm text-error underline decoration-error/30 hover:decoration-error">See Reason</button>
-</td>
-<td className="px-6 py-4 text-right">
-<button className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary text-on-primary rounded-lg font-label-sm text-label-sm shadow-sm hover:bg-primary-container transition-all active:scale-95">
-<span className="material-symbols-outlined text-[16px]">fact_check</span>
-                                        Resubmit
-                                    </button>
-</td>
-</tr>
+</tr>))}
+
 </tbody>
 </table>
 </div>
