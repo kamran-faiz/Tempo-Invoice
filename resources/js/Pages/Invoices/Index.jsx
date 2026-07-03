@@ -1,16 +1,27 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import InvoiceModal from '../../Components/InvoiceModal'
 import { router } from '@inertiajs/react'
+import {usePage} from '@inertiajs/react'
 import toast from 'react-hot-toast'
 
 
 const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
     const [showModal, setShowModal] = useState(false)
+    const {flash} = usePage().props
+    useEffect(() => {
+        if(flash.success)
+            toast.success(flash.success)
+            if(flash.error)
+                toast.error(flash.error)
+            
+        
+    },[flash])
     const [selectedInvoice, setSelectedInvoice] = useState(null)
     const [activeFilter, setActiveFilter] = useState('All')
     const [searchQuery, setSearchQuery] = useState('')
+    
 
     const filteredInvoices = invoice.filter((item) => {
         const matchesSearch = 
@@ -56,10 +67,7 @@ const Index = ({ invoice = [], metrics = {} , clients = [],products = [] }) => {
         router.get(route('invoices.show',id))
     }
     const handleSubmit = (id) => {
-    router.post(route('invoices.submitToFbr', { invoice: id }), {}, {
-        onSuccess: () => toast.success('Invoice validated by FBR'),
-        onError: () => toast.error('Invoice rejected by FBR')
-    })
+    router.post(route('invoices.submitToFbr', { invoice: id }))
 }
 
     return (
