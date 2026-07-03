@@ -3,6 +3,7 @@ import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import { Link } from '@inertiajs/react'
 import {router} from '@inertiajs/react'
 
+
 const Show = ({invoice}) => {
     const subTotal = invoice?.items?.reduce((sum , item) => sum + (item.quantity * item.unit_price) , 0 || 0);
     const taxTotal = invoice?.items?.reduce((sum, item) => sum + Number(item.tax || 0), 0) || 0;
@@ -245,6 +246,7 @@ const Show = ({invoice}) => {
 </div>
 </div>
 </div>
+
 </AuthenticatedLayout>
   )
 }

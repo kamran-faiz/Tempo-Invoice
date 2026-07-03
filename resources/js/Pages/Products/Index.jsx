@@ -159,6 +159,7 @@ const Index = ({ products }) => {
         show={showModal}  
         product={selectedProduct}
       />
+      
     </AuthenticatedLayout>
   )
 }

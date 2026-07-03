@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import {router} from '@inertiajs/react'
 import toast from 'react-hot-toast'
+import ReasonModal from '../../Components/ReasonModal'
 const Index = ({invoices , metrics}) => {
      const [invoiceModal,setInvoiceModal] = useState('false')
      const [searchQuery, setSearchQuery] = useState('')
@@ -12,6 +13,8 @@ const Index = ({invoices , metrics}) => {
             onError: () => toast.error('Invoice rejected by FBR')
         })
     }
+    const [reasonModal,setReasonModal] = useState(false)
+    const [selectedReason,setSelectedReason] = useState(null)
     const filteredInvoices = invoices.filter((item) => {
     const matchesSearch = 
         item.invoice_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -132,7 +135,7 @@ onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 pr-4 py-2 bg-s
 
 <td className="px-6 py-4 text-on-surface-variant">
     {item.fbr_status === 'rejected' 
-        ? <button className="font-label-sm text-label-sm text-error underline">See Reason</button>
+        ? <button onClick={() => { setSelectedReason(item.fbr_rejection_reason); setReasonModal(true) }} className="font-label-sm text-label-sm text-error underline">See Reason</button>
         : '—'
     }
 </td>
@@ -168,6 +171,7 @@ onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 pr-4 py-2 bg-s
 </section>
 </div>
     </div>
+    <ReasonModal show={reasonModal} onClose={() => setReasonModal(false)} reason={selectedReason} />
     </AuthenticatedLayout>
   )
 }
