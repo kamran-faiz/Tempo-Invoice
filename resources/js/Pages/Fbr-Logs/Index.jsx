@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect } from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
-import {router} from '@inertiajs/react'
+import {router, usePage} from '@inertiajs/react'
 import toast from 'react-hot-toast'
 import ReasonModal from '../../Components/ReasonModal'
 const Index = ({invoices , metrics}) => {
      const [invoiceModal,setInvoiceModal] = useState('false')
      const [searchQuery, setSearchQuery] = useState('')
     const [activeFilter,setActiveFilter] = useState('All')
+    const {flash} = usePage().props
+    useEffect(() => {
+        if(flash.success)toast.success(flash.success)
+        if(flash.error)toast.error(flash.error)
+    },[flash])
     const handleSubmit = (id) => {
-        router.post(route('invoices.submitToFbr', { invoice: id }), {}, {
-            onSuccess: () => toast.success('Invoice validated by FBR'),
-            onError: () => toast.error('Invoice rejected by FBR')
-        })
+        router.post(route('invoices.submitToFbr', { invoice: id }))
     }
     const [reasonModal,setReasonModal] = useState(false)
     const [selectedReason,setSelectedReason] = useState(null)
