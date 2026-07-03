@@ -1,13 +1,20 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
 import { Link } from '@inertiajs/react'
-import {router} from '@inertiajs/react'
+import {router , usePage} from '@inertiajs/react'
+import toast from 'react-hot-toast'
+import {useEffect} from 'react'
 
 
 const Show = ({invoice}) => {
     const subTotal = invoice?.items?.reduce((sum , item) => sum + (item.quantity * item.unit_price) , 0 || 0);
     const taxTotal = invoice?.items?.reduce((sum, item) => sum + Number(item.tax || 0), 0) || 0;
     const grandTotal = subTotal + taxTotal;
+    const {flash} = usePage().props
+    useEffect(() =>{
+        if(flash.success)toast.success(flash.success)
+        if(flash.error)toast.error(flash.error)    
+    },[flash])
 
     const handleSubmit = () => {
         router.post(route('invoices.submitToFbr' , {invoice : invoice.id}))
