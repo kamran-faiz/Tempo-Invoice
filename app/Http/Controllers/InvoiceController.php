@@ -68,7 +68,7 @@ $validated['invoice_number'] = 'INV-' . $year . '-' . $sequence;
               ]);
               $invoice->items()->createMany($validated['items']);
         });
-        return redirect()->back()->with('Success', 'Invoice created successfully');
+        return redirect()->back()->with('success', 'Invoice created successfully');
     }
 
    
@@ -122,9 +122,11 @@ $validated['invoice_number'] = 'INV-' . $year . '-' . $sequence;
     public function destroy(Invoice $invoice){
         DB::transaction(function () use ($invoice) {
     $invoice->items()->delete(); 
-    $invoice->delete();         
-});
-    }
+    $invoice->delete();        
+    
+     });
+  return redirect()->back()->with('success','Invoice deleted successfully');} 
+    
     public function show(Invoice $invoice)
 {
    

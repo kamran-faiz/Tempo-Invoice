@@ -1,13 +1,19 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
-import {useState} from 'react'
+import {useState , useEffect} from 'react'
 import ClientModal from '../../Components/ClientModal'
-import { router } from '@inertiajs/react'
+import { router , usePage } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
+import toast from 'react-hot-toast'
 
 const Index = ({clients}) => {
   const [selectedClient,setSelectedClient] = useState(null);
   const [showModal,setShowModal] = useState(false);
+  const {flash} = usePage().props
+  useEffect(()=> {
+    if(flash.success)toast.success(flash.success)
+    if(flash.success)toast.error(flash.error)  
+  },[flash])
   const deleteClient = (id) =>{
     if(!confirm('Are you sure you want to delete this client?')) return;
     router.delete(route('clients.destroy',id))

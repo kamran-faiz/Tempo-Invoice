@@ -28,7 +28,7 @@ class ProductController extends Controller
         ]);
          $validated['business_id'] = 1;
         Product::create($validated);
-        return redirect()->back()->with('Success', 'Product Created Successfully');
+        return redirect()->back()->with('success', 'Product Created Successfully');
     }
 
    public function update(Request $request, Product $product){
@@ -44,11 +44,11 @@ class ProductController extends Controller
         ]);
          
         $product->update($validated);
-        return redirect()->back()->with('Success', 'Product Updated Successfully');
+        return redirect()->back()->with('success', 'Product Updated Successfully');
    }
 
    public function destroy(Product $product){
            $product->delete();
-           return redirect()->back()->with('Success', 'Product Deleted Successfully');
+           return redirect()->back()->with('success', 'Product Deleted Successfully');
    }
 }

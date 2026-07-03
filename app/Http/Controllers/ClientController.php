@@ -31,7 +31,7 @@ class ClientController extends Controller
         ]);
         $validated['business_id'] = 1;
         Client::create($validated);
-        return redirect()->back()->with('Success', 'Client Created Successfully');
+        return redirect()->back()->with('success', 'Client Created Successfully');
     }
 
     public function update(Request $request, Client $client){
@@ -48,7 +48,7 @@ class ClientController extends Controller
     
         ]);
         $client->update($validated);
-        return redirect()->back()->with('Success', 'Client Updated Successfully');
+        return redirect()->back()->with('success', 'Client Updated Successfully');
     }
     public function show(Client $client)
 {
@@ -59,6 +59,6 @@ class ClientController extends Controller
 
     public function destroy(Client $client){
         $client->delete();
-        return redirect()->back()->with('Success', 'Client Deleted Successfully');
+        return redirect()->back()->with('success', 'Client Deleted Successfully');
     }
 }

@@ -1,13 +1,19 @@
 import React from 'react'
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import ProductModal from '../../Components/ProductModal'
-import { router } from '@inertiajs/react'
+import { router , usePage } from '@inertiajs/react'
+import toast from 'react-hot-toast'
 
 const Index = ({ products }) => {
   // FIX 2: Renamed state storage engine to correctly reflect product models
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false)
+  const {flash} = usePage().props
+  useEffect(() => {
+    if(flash.success)toast.success(flash.success)
+    if(flash.error)toast.error(flash.error)
+  },[flash])
 
   // Explicit helper to handle clean reset when shutting the modal window
   const handleCloseModal = () => {
