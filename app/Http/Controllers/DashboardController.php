@@ -10,7 +10,7 @@ class DashboardController extends Controller
     public function index(){
         $metrics = [
             'total_revenue' => Invoice::sum('total'),
-            'total_invocies' => Invoice::count(),
+            'total_invoices' => Invoice::count(),
             'unpaid_count' => Invoice::where('payment_status' , 'unpaid')->count(),
             'unpaid_amount' => Invoice::where('payment_status', 'unpaid')->sum('total'),
             'fbr_pending' => Invoice::where('fbr_status' , 'pending')->count()
