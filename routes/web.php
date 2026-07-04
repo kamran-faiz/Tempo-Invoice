@@ -3,12 +3,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DashboardController;
+
 use App\Http\Controllers\FbrLogController;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Dashboard');
-});
+Route::get('/', [DashboardController::class, 'index']);
 
 
       Route::resource('clients', ClientController::class)->only(['index','store','show','update','destroy']);
