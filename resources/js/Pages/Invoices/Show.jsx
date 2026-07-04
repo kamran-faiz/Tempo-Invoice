@@ -10,6 +10,11 @@ const Show = ({invoice}) => {
     const subTotal = invoice?.items?.reduce((sum , item) => sum + (item.quantity * item.unit_price) , 0 || 0);
     const taxTotal = invoice?.items?.reduce((sum, item) => sum + Number(item.tax || 0), 0) || 0;
     const grandTotal = subTotal + taxTotal;
+    const handleDeleteInvoice = (id) => {
+            if (confirm('Are you sure you want to delete this invoice?')) {
+                router.delete(route('invoices.destroy', id))
+            }
+        }
     const {flash} = usePage().props
     useEffect(() =>{
         if(flash.success)toast.success(flash.success)
@@ -90,13 +95,16 @@ const Show = ({invoice}) => {
     {invoice?.payment_status}
 </span>
 </div>
-<div>
-<p className="font-label-sm text-label-sm text-on-surface-variant mb-1">FBR Status</p>
-<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-tertiary-fixed text-on-tertiary-fixed">
-<span className="material-symbols-outlined text-[14px] mr-1" data-icon="verified">verified</span>
-                                {invoice?.fbr_status}
-                            </span>
-</div>
+<div className={`flex items-center gap-1.5 ${
+                                                invoice.fbr_status === 'validated' ? 'text-tertiary' :
+                                                invoice.fbr_status === 'rejected' ? 'text-error' : 'text-on-surface-variant'
+                                            }`}>
+                                                <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                                    {invoice.fbr_status === 'validated' ? 'check_circle' : 
+                                                     invoice.fbr_status === 'rejected' ? 'cancel' : 'hourglass_empty'}
+                                                </span>
+                                                <span className="text-label-sm font-medium capitalize">{invoice.fbr_status}</span>
+                                            </div>
 </div>
 {/* <!-- Line Items Table --> */}
 <div className="mb-10 overflow-x-auto">
@@ -160,16 +168,18 @@ const Show = ({invoice}) => {
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
 <h5 className="font-label-sm text-label-sm text-on-surface-variant uppercase mb-4">Invoice Status</h5>
 <div className="flex items-center justify-between mb-6">
-<span className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold bg-error-container text-on-error-container">
-<span className="material-symbols-outlined mr-2" data-icon="pending">pending</span>
-                            UNPAID
-                        </span>
-<p className="font-label-sm text-label-sm text-on-surface-variant">Due in 26 days</p>
+<span className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold ${
+    invoice?.payment_status === 'paid' ? 'bg-tertiary-fixed text-on-tertiary-fixed' :
+    invoice?.payment_status === 'overdue' ? 'bg-error text-on-error' :
+    'bg-error-container text-on-error-container'
+}`}><span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                                    {invoice.payment_status === 'paid'? 'check_circle' : 
+                                                     invoice.payment_status === 'unpaid' ? 'cancel' : 'hourglass_empty'}
+                                                </span>
+                                                 </span>
+<p className="font-label-sm text-label-sm text-on-surface-vaiant">Due in 26 days</p>
 </div>
-<button className="w-full py-3 bg-tertiary text-on-tertiary rounded-lg font-label-md text-label-md hover:bg-tertiary/90 transition-all active:scale-95 flex items-center justify-center gap-2">
-<span className="material-symbols-outlined" data-icon="check_circle">check_circle</span>
-                        Mark as Paid
-                    </button>
+
 </div>
 {/* <!-- FBR Status Card --> */}
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
@@ -220,7 +230,7 @@ const Show = ({invoice}) => {
                             Edit Invoice
                         </button>
 <div className="pt-2">
-<button className="w-full py-3 border border-error text-error rounded-lg font-label-md text-label-md hover:bg-error/5 transition-all active:scale-95 flex items-center justify-center gap-2">
+<button onClick={() => handleDeleteInvoice(item.id)} className="w-full py-3 border border-error text-error rounded-lg font-label-md text-label-md hover:bg-error/5 transition-all active:scale-95 flex items-center justify-center gap-2">
 <span className="material-symbols-outlined" data-icon="delete">delete</span>
                                 Delete Invoice
                             </button>

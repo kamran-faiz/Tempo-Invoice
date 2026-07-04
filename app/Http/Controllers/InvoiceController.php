@@ -49,6 +49,8 @@ class InvoiceController extends Controller
               'items.*.amount'       => 'required|numeric|min:0',
               'items.*.tax'          => 'required|numeric|min:0',
               'items.*.total'        => 'required|numeric|min:0',
+              'payment_status' => 'required|in:paid,unpaid,overdue',
+
         ]);
         $year = date('Y');
 $count = Invoice::count();
@@ -65,6 +67,8 @@ $validated['invoice_number'] = 'INV-' . $year . '-' . $sequence;
                    'tax'            => $validated['tax'],
                    'total'          => $validated['total'],
                    'notes'          => $validated['notes'],
+                   'payment_status' => $validated['payment_status'] ?? 'unpaid',
+
               ]);
               $invoice->items()->createMany($validated['items']);
         });
