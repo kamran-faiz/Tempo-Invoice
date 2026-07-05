@@ -172,7 +172,8 @@ const Show = ({invoice}) => {
     invoice?.payment_status === 'paid' ? 'bg-tertiary-fixed text-on-tertiary-fixed' :
     invoice?.payment_status === 'overdue' ? 'bg-error text-on-error' :
     'bg-error-container text-on-error-container'
-}`}><span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+}`}>
+    {invoice?.payment_status}<span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                                                     {invoice.payment_status === 'paid'? 'check_circle' : 
                                                      invoice.payment_status === 'unpaid' ? 'cancel' : 'hourglass_empty'}
                                                 </span>
@@ -230,7 +231,7 @@ const Show = ({invoice}) => {
                             Edit Invoice
                         </button>
 <div className="pt-2">
-<button onClick={() => handleDeleteInvoice(item.id)} className="w-full py-3 border border-error text-error rounded-lg font-label-md text-label-md hover:bg-error/5 transition-all active:scale-95 flex items-center justify-center gap-2">
+<button onClick={() => handleDeleteInvoice(invoice.id)} className="w-full py-3 border border-error text-error rounded-lg font-label-md text-label-md hover:bg-error/5 transition-all active:scale-95 flex items-center justify-center gap-2">
 <span className="material-symbols-outlined" data-icon="delete">delete</span>
                                 Delete Invoice
                             </button>
