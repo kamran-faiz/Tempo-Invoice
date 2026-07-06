@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Invoice;
 use App\Models\Client;
 class ClientController extends Controller
 {
@@ -51,9 +52,18 @@ class ClientController extends Controller
         return redirect()->back()->with('success', 'Client Updated Successfully');
     }
     public function show(Client $client)
-{
+{     
+    $client->load('invoices');
+    $metrics = [
+        'total_invoiced' => $client->invoices->sum('total'),
+        'pending_amount' => $client->invoices->where('payment_status','unpaid')->sum('total'),
+        'overdue_amount' => $client->invoices->where('payment_status', 'overdue')->sum('total'),
+        
+    ];
     return inertia('Clients/View', [
-        'client' => $client
+        'client' => $client,
+        'metrics' => $metrics,
+
     ]);
 }
 

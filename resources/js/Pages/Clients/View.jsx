@@ -1,8 +1,23 @@
 import React from 'react'
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
-import { Link } from '@inertiajs/react'
+import { Link ,usePage } from '@inertiajs/react'
+import {useEffect} from 'react'
+import toast from 'react-hot-toast'
 
-const View = ({client}) => {
+const View = ({client , metrics}) => {
+    const {flash} = usePage().props
+useEffect(() => {
+    if(flash.success)toast.success(flash.success)
+    if(flash.error)toast.error(flash.error)
+        }, [flash])
+     const formatCurrency = (value) => {
+        return new Intl.NumberFormat('en-PK', {
+            style: 'currency',
+            currency: 'PKR',
+            minimumFractionDigits: 0
+        }).format(value || 0);
+    }
+  
   return (
     <AuthenticatedLayout title="Client Detail">
         <section className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 rounded-lg border border-outline-variant mt-6 mb-6 ">
@@ -39,7 +54,7 @@ const View = ({client}) => {
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 <div className="bg-white p-6 rounded-lg border border-outline-variant">
 <p className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Invoiced</p>
-<p className="font-stat-lg text-stat-lg text-on-surface mt-2">Rs. 1,240,500</p>
+<p className="font-stat-lg text-stat-lg text-on-surface mt-2">{formatCurrency(metrics['total_invoiced'])}</p>
 <div className="mt-4 flex items-center text-tertiary gap-1">
 <span className="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span>
 <span className="text-[12px] font-medium">+12% from last month</span>
@@ -47,12 +62,12 @@ const View = ({client}) => {
 </div>
 <div className="bg-white p-6 rounded-lg border border-outline-variant">
 <p className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Pending Payment</p>
-<p className="font-stat-lg text-stat-lg text-primary mt-2">Rs. 45,000</p>
+<p className="font-stat-lg text-stat-lg text-primary mt-2">{formatCurrency(metrics['pending_amount'])}</p>
 <p className="text-[12px] text-on-surface-variant mt-4">2 invoices outstanding</p>
 </div>
 <div className="bg-white p-6 rounded-lg border border-outline-variant">
 <p className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Overdue Amount</p>
-<p className="font-stat-lg text-stat-lg text-on-surface-variant/40 mt-2">Rs. 0</p>
+<p className="font-stat-lg text-stat-lg text-on-surface-variant/40 mt-2">{formatCurrency(metrics['overdue_amount'])}</p>
 <div className="mt-4 flex items-center text-tertiary gap-1">
 <span className="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
 <span className="text-[12px] font-medium">All clear</span>
@@ -86,19 +101,19 @@ const View = ({client}) => {
 </tr>
 </thead>
 <tbody className="divide-y divide-outline-variant">
-{/* <!-- Row 1 --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
-<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">#INV-2026-042</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">May 10, 2026</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">120,000</td>
+{client.invoices?.map((invoice) => (
+<tr key={invoice.id} className="hover:bg-surface-container-low transition-colors group">
+<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">{invoice.invoice_number}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{invoice.due_date}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">{invoice.amount}</td>
 <td className="px-6 py-4">
 <span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
-                                                Verified
+                                               {invoice.fbr_status}
                                             </span>
 </td>
 <td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">Paid</span>
+<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">{invoice.payment_status}</span>
 </td>
 <td className="px-6 py-4 text-right">
 <button className="text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
@@ -106,86 +121,8 @@ const View = ({client}) => {
 </button>
 </td>
 </tr>
-{/* <!-- Row 2 --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
-<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">#INV-2026-041</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">May 08, 2026</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">45,000</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-bold">
-<span className="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>
-                                                Pending
-                                            </span>
-</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold">Unpaid</span>
-</td>
-<td className="px-6 py-4 text-right">
-<button className="text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
-<span className="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
-{/* <!-- Row 3 --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
-<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">#INV-2026-039</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Apr 28, 2026</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">310,000</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">
-<span className="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
-                                                Verified
-                                            </span>
-</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">Paid</span>
-</td>
-<td className="px-6 py-4 text-right">
-<button className="text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
-<span className="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
-{/* <!-- Row 4 --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
-<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">#INV-2026-035</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Apr 15, 2026</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">55,500</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">
-<span className="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
-                                                Verified
-                                            </span>
-</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">Paid</span>
-</td>
-<td className="px-6 py-4 text-right">
-<button className="text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
-<span className="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
-{/* <!-- Row 5 --> */}
-<tr className="hover:bg-surface-container-low transition-colors group">
-<td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">#INV-2026-030</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Mar 22, 2026</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">200,000</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">
-<span className="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
-                                                Verified
-                                            </span>
-</td>
-<td className="px-6 py-4">
-<span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">Paid</span>
-</td>
-<td className="px-6 py-4 text-right">
-<button className="text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
-<span className="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
+))}
+
 </tbody>
 </table>
 </div>
@@ -220,7 +157,7 @@ const View = ({client}) => {
 </div>
 <div>
 <p className="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Email Address</p>
-<Link className="font-body-lg text-body-lg text-primary hover:underline mt-1 block" href="mailto:finance@industech.pk">finance@industech.pk</Link>
+<Link className="font-body-lg text-body-lg text-primary hover:underline mt-1 block" href="mailto:finance@industech.pk">{client.email}</Link>
 </div>
 </div>
 <div className="flex items-start gap-4">
@@ -229,7 +166,7 @@ const View = ({client}) => {
 </div>
 <div>
 <p className="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Phone Number</p>
-<p className="font-body-lg text-body-lg text-on-surface mt-1">+92 42 35712345</p>
+<p className="font-body-lg text-body-lg text-on-surface mt-1">{client.phone}</p>
 </div>
 </div>
 <div className="flex items-start gap-4 pt-4 border-t border-outline-variant">
@@ -239,7 +176,7 @@ const View = ({client}) => {
 <div>
 <p className="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Business Address</p>
 <p className="font-body-md text-body-md text-on-surface mt-1 leading-relaxed">
-                                        Office 402, Business Tower, Main Boulevard, Gulberg III, Lahore, Pakistan
+                                       {client.address}
                                     </p>
 <button className="text-primary font-label-md text-label-md mt-2 flex items-center gap-1 hover:underline">
                                         View on map <span className="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>

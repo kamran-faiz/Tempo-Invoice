@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Invoice;
 
 class Client extends Model
 {
@@ -22,5 +23,8 @@ class Client extends Model
 
     public function business(){
         return $this->belongsTo(Business::class);
+    }
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
     }
 }
