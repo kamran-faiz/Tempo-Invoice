@@ -1,6 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import InvoiceModal from '@/Components/InvoiceModal'
 import ProductModal from '@/Components/ProductModal'
+import ClientModal from '@/Components/ClientModal'
 import {useState} from 'react'
 export default function Dashboard({metrics , recent_invoices , top_clients , clients , products}) {
      const [activeModal, setActiveModal] = useState(null)
@@ -124,7 +125,7 @@ export default function Dashboard({metrics , recent_invoices , top_clients , cli
 <span className="material-symbols-outlined text-[18px]">add</span>
                                 Create Invoice
                             </button>
-<button className="w-full py-3 px-4 border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all">
+<button onClick={() => setActiveModal('client')} className="w-full py-3 px-4 border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all">
 <span className="material-symbols-outlined text-[18px]">person_add</span>
                                 Add Client
                             </button>
@@ -169,6 +170,7 @@ export default function Dashboard({metrics , recent_invoices , top_clients , cli
 </div>
 <InvoiceModal show={activeModal === 'invoice'} invoice={null} clients={clients} products={products} onClose={() => setActiveModal(null)} />
 <ProductModal show= {activeModal === 'product'}  product={null} onClose={() => setActiveModal(null)} />
+<ClientModal show={activeModal === 'client'} client={null} onClose={() => setActiveModal(null)} />
         </AuthenticatedLayout>
     )
 }
