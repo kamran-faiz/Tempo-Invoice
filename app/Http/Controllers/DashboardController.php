@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Client;
+use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -24,6 +25,8 @@ class DashboardController extends Controller
             'metrics' => $metrics,
             'recent_invoices' => $recentInvoices,
             'top_clients' => $topClients,
+             'clients' => Client::all(),
+            'products' => Product::all(),
 
         ] );
     }

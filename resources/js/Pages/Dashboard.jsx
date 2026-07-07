@@ -1,6 +1,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-export default function Dashboard({metrics , recent_invoices , top_clients}) {
-      const formatCurrency = (value) => {
+import InvoiceModal from '@/Components/InvoiceModal'
+import {useState} from 'react'
+export default function Dashboard({metrics , recent_invoices , top_clients , clients , products}) {
+     const [showModal, setShowModal] = useState(false)
+      const handleCreateOpen = () => {
+        setShowModal(true)
+    }
+
+     const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-PK', {
             style: 'currency',
             currency: 'PKR',
@@ -114,7 +121,7 @@ export default function Dashboard({metrics , recent_invoices , top_clients}) {
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
 <h4 className="font-headline-md text-headline-md mb-5">Quick Actions</h4>
 <div className="flex flex-col gap-3">
-<button className="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-all">
+<button onClick={handleCreateOpen}  className="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-all">
 <span className="material-symbols-outlined text-[18px]">add</span>
                                 Create Invoice
                             </button>
@@ -161,6 +168,7 @@ export default function Dashboard({metrics , recent_invoices , top_clients}) {
 <p className="font-label-sm text-label-sm text-on-surface-variant opacity-60">Tempo Invoice © 2026. All rights reserved. Registered with FBR Punjab.</p>
 </footer>
 </div>
+<InvoiceModal show={showModal} invoice={null} clients={clients} products={products} onClose={() => setShowModal(false)} />
         </AuthenticatedLayout>
     )
 }

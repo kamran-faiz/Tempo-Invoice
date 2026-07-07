@@ -1,9 +1,7 @@
 import React from 'react'
-import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Link } from '@inertiajs/react'
-import {router , usePage} from '@inertiajs/react'
-import toast from 'react-hot-toast'
-import {useEffect} from 'react'
+import {router} from '@inertiajs/react'
 
 
 const Show = ({invoice}) => {
@@ -15,12 +13,6 @@ const Show = ({invoice}) => {
                 router.delete(route('invoices.destroy', id))
             }
         }
-    const {flash} = usePage().props
-    useEffect(() =>{
-        if(flash.success)toast.success(flash.success)
-        if(flash.error)toast.error(flash.error)    
-    },[flash])
-
     const handleSubmit = () => {
         router.post(route('invoices.submitToFbr' , {invoice : invoice.id}))
     }

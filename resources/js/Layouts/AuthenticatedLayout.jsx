@@ -1,7 +1,15 @@
-import { usePage,Link } from '@inertiajs/react'
-import { Toaster } from 'react-hot-toast'
+import { useEffect } from 'react'
+import { usePage, Link } from '@inertiajs/react'
+import toast, { Toaster } from 'react-hot-toast'
 export default function AuthenticatedLayout({ title, children }) {
-    const { url } = usePage()
+    const { url, props } = usePage()
+    const { flash } = props
+
+    useEffect(() => {
+        if (flash?.success) toast.success(flash.success)
+        if (flash?.error) toast.error(flash.error)
+    }, [flash])
+
     return (
         
         <div>

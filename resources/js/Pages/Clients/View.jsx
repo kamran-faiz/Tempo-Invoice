@@ -1,15 +1,8 @@
 import React from 'react'
-import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout'
-import { Link ,usePage } from '@inertiajs/react'
-import {useEffect} from 'react'
-import toast from 'react-hot-toast'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import { Link } from '@inertiajs/react'
 
 const View = ({client , metrics}) => {
-    const {flash} = usePage().props
-useEffect(() => {
-    if(flash.success)toast.success(flash.success)
-    if(flash.error)toast.error(flash.error)
-        }, [flash])
      const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-PK', {
             style: 'currency',
