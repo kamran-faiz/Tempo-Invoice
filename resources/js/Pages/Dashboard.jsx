@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-export default function Dashboard({metrics , recent_invoices}) {
+export default function Dashboard({metrics , recent_invoices , top_clients}) {
       const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-PK', {
             style: 'currency',
@@ -110,7 +110,7 @@ export default function Dashboard({metrics , recent_invoices}) {
 </div>
 {/* <!-- RIGHT COLUMN: Actions & Top Clients (35%) --> */}
 <div className="lg:col-span-4 space-y-6">
-{/* <!-- Quick Actions --> */}
+
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
 <h4 className="font-headline-md text-headline-md mb-5">Quick Actions</h4>
 <div className="flex flex-col gap-3">
@@ -136,61 +136,25 @@ export default function Dashboard({metrics , recent_invoices}) {
 </div>
 <div className="space-y-5">
 {/* <!-- Client 1 --> */}
-<div className="flex items-center justify-between">
+{top_clients.map((client) => (
+<div key={client.id} className="flex items-center justify-between">
 <div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-[12px]">SS</div>
+<div className="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-[12px]">{client.name.charAt(0)}</div>
 <div>
-<p className="font-body-md text-body-md font-semibold text-on-surface">Siddique & Sons</p>
-<p className="text-[11px] text-on-surface-variant">12 Invoices</p>
+<p className="font-body-md text-body-md font-semibold text-on-surface">{client.name}</p>
+{/* <p className="text-[11px] text-on-surface-variant">12 Invoices</p> */}
 </div>
 </div>
 <div className="text-right">
-<p className="font-label-md text-label-md font-bold text-on-surface">Rs. 4.2M</p>
+<p className="font-label-md text-label-md font-bold text-on-surface">{formatCurrency(client.invoices_sum_total)}</p>
 </div>
-</div>
-{/* <!-- Client 2 --> */}
-<div className="flex items-center justify-between">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-[12px]">LT</div>
-<div>
-<p className="font-body-md text-body-md font-semibold text-on-surface">Lahore Tech Hub</p>
-<p className="text-[11px] text-on-surface-variant">8 Invoices</p>
-</div>
-</div>
-<div className="text-right">
-<p className="font-label-md text-label-md font-bold text-on-surface">Rs. 2.8M</p>
-</div>
-</div>
-{/* <!-- Client 3 --> */}
-<div className="flex items-center justify-between">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-bold text-[12px]">KT</div>
-<div>
-<p className="font-body-md text-body-md font-semibold text-on-surface">Karachi Textiles</p>
-<p className="text-[11px] text-on-surface-variant">6 Invoices</p>
-</div>
-</div>
-<div className="text-right">
-<p className="font-label-md text-label-md font-bold text-on-surface">Rs. 1.5M</p>
-</div>
-</div>
-{/* <!-- Client 4 --> */}
-<div className="flex items-center justify-between">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-bold text-[12px]">ZL</div>
-<div>
-<p className="font-body-md text-body-md font-semibold text-on-surface">Zubair Logistics</p>
-<p className="text-[11px] text-on-surface-variant">5 Invoices</p>
-</div>
-</div>
-<div className="text-right">
-<p className="font-label-md text-label-md font-bold text-on-surface">Rs. 980K</p>
-</div>
-</div>
+</div>))}
+
 </div>
 <button className="w-full mt-6 py-2 text-primary font-label-md text-label-md hover:bg-primary/5 transition-colors rounded">View detailed report</button>
 </div>
 </div>
+
 </div>
 {/* <!-- FOOTER --> */}
 <footer className="mt-12 mb-8 text-center">

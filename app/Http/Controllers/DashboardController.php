@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Invoice;
+use App\Models\Client;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -16,13 +17,13 @@ class DashboardController extends Controller
             'fbr_pending' => Invoice::where('fbr_status' , 'pending')->count(),
         ];
         $recentInvoices = Invoice::with('client:id,name')->latest()->take(5)->get();
-        $topClient = Clinet::withSum('invoices', 'total_amount') 
-                                ->OrderBy('invoices_sum_total_amount' , 'desc') ->Limit(5) ->get();
+        $topClients = Client::withSum('invoices', 'total') 
+                                ->OrderBy('invoices_sum_total' , 'desc') ->Limit(5) ->get();
 
         return Inertia::render('Dashboard' , [
             'metrics' => $metrics,
             'recent_invoices' => $recentInvoices,
-            'top_client' => $topClient,
+            'top_clients' => $topClients,
 
         ] );
     }
