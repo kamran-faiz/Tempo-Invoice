@@ -13,13 +13,16 @@ class DashboardController extends Controller
             'total_invoices' => Invoice::count(),
             'unpaid_count' => Invoice::where('payment_status' , 'unpaid')->count(),
             'unpaid_amount' => Invoice::where('payment_status', 'unpaid')->sum('total'),
-            'fbr_pending' => Invoice::where('fbr_status' , 'pending')->count()
+            'fbr_pending' => Invoice::where('fbr_status' , 'pending')->count(),
         ];
         $recentInvoices = Invoice::with('client:id,name')->latest()->take(5)->get();
+        $topClient = Clinet::withSum('invoices', 'total_amount') 
+                                ->OrderBy('invoices_sum_total_amount' , 'desc') ->Limit(5) ->get();
 
         return Inertia::render('Dashboard' , [
             'metrics' => $metrics,
             'recent_invoices' => $recentInvoices,
+            'top_client' => $topClient,
 
         ] );
     }
