@@ -1,8 +1,15 @@
 import React from 'react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Link } from '@inertiajs/react'
+import { useState } from 'react'
+import InvoiceModal from '../../Components/InvoiceModal'
 
-const View = ({client , metrics}) => {
+const View = ({client, metrics, products = [], clients = []}) => {
+        const [showModal, setShowModal] = useState(false)
+        const handleCreateOpen = () => {
+        
+        setShowModal(true)
+    }
      const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-PK', {
             style: 'currency',
@@ -33,7 +40,7 @@ const View = ({client , metrics}) => {
 <span className="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
                         Edit Profile
                     </button>
-<button className="px-6 py-2.5 bg-primary text-white font-label-md text-label-md rounded-lg hover:bg-on-primary-fixed-variant transition-all shadow-sm active:scale-95 flex items-center gap-2">
+<button onClick={handleCreateOpen} className="px-6 py-2.5 bg-primary text-white font-label-md text-label-md rounded-lg hover:bg-on-primary-fixed-variant transition-all shadow-sm active:scale-95 flex items-center gap-2">
 <span className="material-symbols-outlined text-[18px]" data-icon="add">add</span>
                         Create Invoice
                     </button>
@@ -98,7 +105,7 @@ const View = ({client , metrics}) => {
 <tr key={invoice.id} className="hover:bg-surface-container-low transition-colors group">
 <td className="px-6 py-4 font-body-md text-body-md text-primary font-medium">{invoice.invoice_number}</td>
 <td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant">{invoice.due_date}</td>
-<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">{invoice.amount}</td>
+<td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold">{formatCurrency(invoice.amount)}</td>
 <td className="px-6 py-4">
 <span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full bg-tertiary-container/10 text-tertiary-container text-[11px] font-bold">
 <span className="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
@@ -213,6 +220,8 @@ const View = ({client , metrics}) => {
 </div>
 </aside>
 </div>
+            <InvoiceModal show={showModal} invoice={null} products={products} clients={[client]} onClose={() => setShowModal(false)}/>
+
     </AuthenticatedLayout>
   )
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Product;
 use App\Models\Invoice;
 use App\Models\Client;
 class ClientController extends Controller
@@ -63,6 +64,7 @@ class ClientController extends Controller
     return inertia('Clients/View', [
         'client' => $client,
         'metrics' => $metrics,
+         'products' => Product::all(),
 
     ]);
 }
