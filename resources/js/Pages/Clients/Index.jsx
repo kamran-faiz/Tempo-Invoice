@@ -8,6 +8,14 @@ import { Link } from '@inertiajs/react'
 const Index = ({clients}) => {
   const [selectedClient,setSelectedClient] = useState(null);
   const [showModal,setShowModal] = useState(false);
+  const [activeFilter,setActiveFilter] = useState('all')
+  const filtredclients = clients.filter((client)=>{
+    if(activeFilter === 'all')return true
+    if(activeFilter === 'b2b') return client.client_type ==='b2b'
+    if(activeFilter === 'b2c') return client.client_type === 'b2c'
+    return true
+  })
+
   const deleteClient = (id) =>{
     if(!confirm('Are you sure you want to delete this client?')) return;
     router.delete(route('clients.destroy',id))
@@ -36,9 +44,9 @@ const Index = ({clients}) => {
 </div>
 {/* <!-- Tabs --> */}
 <div className="flex gap-8 border-b border-outline-variant">
-<button className="pb-3 border-b-2 border-primary text-primary font-bold font-label-md text-label-md">All</button>
-<button className="pb-3 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">B2B</button>
-<button className="pb-3 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">B2C</button>
+<button onClick={() => setActiveFilter('all')} className="pb-3 border-b-2 border-primary text-primary font-bold font-label-md text-label-md">all</button>
+<button onClick={() => setActiveFilter('b2b')} className="pb-3 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">b2b</button>
+<button onClick={() => setActiveFilter('b2c')} className="pb-3 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">b2c</button>
 </div>
 {/* <!-- Clients Table Card --> */}
 <div className="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden shadow-sm">
@@ -56,7 +64,7 @@ const Index = ({clients}) => {
 <th className="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-center">Actions</th>
 </tr>
 </thead>
-<tbody  className="divide-y divide-outline-variant"> {clients.map(client => (
+<tbody  className="divide-y divide-outline-variant"> {filtredclients.map(client => (
 
 <tr key={client.id} className="hover:bg-surface-container-low/50 transition-colors group">
 <td className="px-6 py-4">

@@ -158,7 +158,6 @@ export default function Dashboard({metrics , recent_invoices , top_clients , cli
 </div>))}
 
 </div>
-<button className="w-full mt-6 py-2 text-primary font-label-md text-label-md hover:bg-primary/5 transition-colors rounded">View detailed report</button>
 </div>
 </div>
 
