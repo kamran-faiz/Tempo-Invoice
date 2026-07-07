@@ -1,6 +1,5 @@
 import React from 'react'
-import SuperadminLayout from './SuperadminLayout'
-
+import SuperadminLayout from '@/Layouts/SuperadminLayout'
 const Dashboard = () => {
   return (
     <SuperadminLayout title="Dashboard">
@@ -53,8 +52,7 @@ const Dashboard = () => {
     <div className="glass-panel p-lg rounded-xl flex flex-col justify-between h-40 border-primary/30 bg-primary/5 hover:border-primary transition-all group">
         <div className="flex justify-between items-start">
             <span className="font-label-md text-label-md text-primary">Total Revenue (PKR)</span>
-            <span className="material-symbols-outlined text-primary" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
-        </div>
+            <span className="material-symbols-outlined text-primary" data-icon="payments" style={{ fontVariationSettings: "'FILL' 1" }}>payments</span>        </div>
         <div>
             <h3 className="font-headline-lg text-headline-lg font-extrabold text-primary-fixed">92.4M</h3>
             <p className="font-label-sm text-label-sm text-on-primary-container/60 mt-1 uppercase tracking-widest">Platform Aggregate</p>

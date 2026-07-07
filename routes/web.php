@@ -16,5 +16,8 @@ Route::get('/', [DashboardController::class, 'index']);
       Route::resource('invoices', InvoiceController::class)->only(['index','store','update','destroy','show']);
       Route::post('invoices/{invoice}/submit-to-fbr', [InvoiceController::class, 'submitToFbr'])->name('invoices.submitToFbr');
       Route::get('/fbr-logs', [FbrLogController::class, 'index']);
+      Route::get('/superadmin/dashboard', function () {
+    return Inertia::render('SuperAdmin/Dashboard');
+})->name('superadmin.dashboard');
 
 
