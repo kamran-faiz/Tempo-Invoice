@@ -9,7 +9,7 @@ const Index = ({clients}) => {
   const [selectedClient,setSelectedClient] = useState(null);
   const [showModal,setShowModal] = useState(false);
   const [activeFilter,setActiveFilter] = useState('all')
-  const filtredclients = clients.filter((client)=>{
+  const filtredclients = clients.data.filter((client)=>{
     if(activeFilter === 'all')return true
     if(activeFilter === 'b2b') return client.client_type ==='b2b'
     if(activeFilter === 'b2c') return client.client_type === 'b2c'
@@ -29,7 +29,7 @@ const Index = ({clients}) => {
 <div className="flex justify-between items-center">
 <div className="flex items-center gap-3">
 <h3 className="font-headline-md text-headline-md text-on-surface">All Clients</h3>
-<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded">{clients.length}clients</span>
+<span className="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded">{clients.total}clients</span>
 </div>
 <div className="flex items-center gap-4">
 <div className="relative">
@@ -83,7 +83,7 @@ const Index = ({clients}) => {
 <td className="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">24</td>
 <td className="px-6 py-4 font-body-md text-body-md text-on-surface font-semibold text-right">PKR 1.2M</td>
 <td className="px-6 py-4 text-center">
-<div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<div className="flex justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
 
 <Link href={`/clients/${client.id}`} className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></Link>
 <button onClick={() => { setSelectedClient(client); setShowModal(true); }} className="p-1 text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined text-[20px]" data-icon="edit">edit</span></button>
@@ -95,20 +95,26 @@ const Index = ({clients}) => {
 </tbody>
 </table>
 {/* <!-- Pagination --> */}
+
+{/* <!-- Pagination --> */}
 <div className="px-6 py-4 flex items-center justify-between bg-surface-container-low/30 border-t border-outline-variant">
-<span className="font-label-sm text-label-sm text-on-surface-variant">Showing 1–8 of 124 clients</span>
-<div className="flex items-center gap-2">
-<button className="px-3 py-1 border border-outline-variant rounded hover:bg-surface transition-colors disabled:opacity-50 font-label-sm text-label-sm" disabled="">Previous</button>
-<div className="flex items-center gap-1">
-<button className="w-8 h-8 rounded bg-primary text-on-primary font-label-sm text-label-sm">1</button>
-<button className="w-8 h-8 rounded hover:bg-surface-variant font-label-sm text-label-sm transition-colors">2</button>
-<button className="w-8 h-8 rounded hover:bg-surface-variant font-label-sm text-label-sm transition-colors">3</button>
-<span className="px-1 text-on-surface-variant">...</span>
-<button className="w-8 h-8 rounded hover:bg-surface-variant font-label-sm text-label-sm transition-colors">16</button>
+    <span className="font-label-sm text-label-sm text-on-surface-variant">
+        Showing {clients.from} to {clients.to} of {clients.total} clients
+    </span>
+    <div className="flex items-center gap-2">
+        {clients.links.map((link, index) => (
+            <Link
+                key={index}
+                href={link.url || '#'}
+                className={`px-3 py-1 rounded font-label-sm text-label-sm transition-colors ${
+                    link.active ? 'bg-primary text-on-primary' : 'hover:bg-surface-variant'
+                } ${!link.url ? 'opacity-50 pointer-events-none' : ''}`}
+                dangerouslySetInnerHTML={{ __html: link.label }}
+            />
+        ))}
+    </div>
 </div>
-<button className="px-3 py-1 border border-outline-variant rounded hover:bg-surface transition-colors font-label-sm text-label-sm">Next</button>
-</div>
-</div>
+
 </div>
 {/* <!-- FBR Compliance Status Banner (Specialized Component) --> */}
 <div className="bg-primary/5 border border-primary/20 rounded-lg p-6 flex items-center justify-between">
