@@ -3,9 +3,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Link } from '@inertiajs/react'
 import { useState } from 'react'
 import InvoiceModal from '../../Components/InvoiceModal'
+import ClientModal from '../../Components/ClientModal'
 
 const View = ({client, metrics, products = [], clients = []}) => {
         const [showModal, setShowModal] = useState(false)
+        const [showEditModal, setShowEditModal] = useState(false)
+
+        const handleEditOpen = () => {
+            setShowEditModal(true)
+        }
+
         const handleCreateOpen = () => {
         
         setShowModal(true)
@@ -36,7 +43,7 @@ const View = ({client, metrics, products = [], clients = []}) => {
 </div>
 </div>
 <div className="flex items-center gap-3">
-<button className="px-6 py-2.5 border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container transition-colors flex items-center gap-2">
+<button onClick={handleEditOpen} className="px-6 py-2.5 border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container transition-colors flex items-center gap-2">
 <span className="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
                         Edit Profile
                     </button>
@@ -221,7 +228,7 @@ const View = ({client, metrics, products = [], clients = []}) => {
 </aside>
 </div>
             <InvoiceModal show={showModal} invoice={null} products={products} clients={[client]} onClose={() => setShowModal(false)}/>
-
+<ClientModal show={showEditModal} client={client} onClose={() => setShowEditModal(false)} />
     </AuthenticatedLayout>
   )
 }
