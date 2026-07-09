@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
 import { usePage, Link } from '@inertiajs/react'
 import toast, { Toaster } from 'react-hot-toast'
 
@@ -6,6 +6,11 @@ export default function AuthenticatedLayout({ title, children }) {
     const { url, props } = usePage()
     const { flash, auth } = props
     const user = auth?.user
+    const [date , setDate] = useState(new Date())
+    useEffect(() => {
+    const interval = setInterval(() => { setDate (new Date())}, 60000)
+    return () => clearInterval(interval)
+}, [])
 
     useEffect(() => {
         if (flash?.success) toast.success(flash.success)
@@ -70,7 +75,7 @@ export default function AuthenticatedLayout({ title, children }) {
                     <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">{title}</h2>
                 </div>
                 <div className="flex items-center gap-8">
-                    <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">Friday, May 15 2026</span>
+                    <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">{date.toLocaleDateString()}</span>
                     <div className="flex items-center gap-4">
                         <button className="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
                             <span className="material-symbols-outlined">notifications</span>
