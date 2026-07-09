@@ -47,15 +47,51 @@
     --color-surface-dim: #dad9e3;
     --color-on-secondary-fixed: #191b22;
     --color-background: #fbf8ff;
-    --spacing-xs: 4px;
---spacing-sm: 8px;
---spacing-md: 16px;
---spacing-lg: 24px;
---spacing-xl: 40px;
---spacing-gutter: 24px;
+    --spacing-gutter: 24px;
    
     
 }
+
+@utility p-lg {
+    padding: 24px;
+}
+
+@utility px-md {
+    padding-inline: 16px;
+}
+
+@utility px-lg {
+    padding-inline: 24px;
+}
+
+@utility py-sm {
+    padding-block: 8px;
+}
+
+@utility py-md {
+    padding-block: 16px;
+}
+
+@utility mt-xl {
+    margin-top: 40px;
+}
+
+@utility mb-md {
+    margin-bottom: 16px;
+}
+
+@utility mb-lg {
+    margin-bottom: 24px;
+}
+
+@utility mt-gutter {
+    margin-top: var(--spacing-gutter);
+}
+
+@utility gap-gutter {
+    gap: var(--spacing-gutter);
+}
+
 body {
     font-family: 'Inter', sans-serif;
 }
