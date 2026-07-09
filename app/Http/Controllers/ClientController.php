@@ -52,20 +52,21 @@ class ClientController extends Controller
         $client->update($validated);
         return redirect()->back()->with('success', 'Client Updated Successfully');
     }
-    public function show(Client $client)
+   public function show(Client $client)
 {     
-    $client->load('invoices');
+    $invoices = $client->invoices()->paginate(5);
+    
     $metrics = [
         'total_invoiced' => $client->invoices->sum('total'),
         'pending_amount' => $client->invoices->where('payment_status','unpaid')->sum('total'),
         'overdue_amount' => $client->invoices->where('payment_status', 'overdue')->sum('total'),
-        
     ];
+    
     return inertia('Clients/View', [
         'client' => $client,
         'metrics' => $metrics,
-         'products' => Product::all(),
-
+        'products' => Product::all(),
+        'invoices' => $invoices,
     ]);
 }
 

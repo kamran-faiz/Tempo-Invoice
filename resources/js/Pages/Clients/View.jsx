@@ -5,11 +5,11 @@ import { useState } from 'react'
 import InvoiceModal from '../../Components/InvoiceModal'
 import ClientModal from '../../Components/ClientModal'
 
-const View = ({client, metrics, products = [], clients = []}) => {
+const View = ({client, metrics, products = [], clients = [] , invoices = { data: [], links: [], from: 0, to: 0, total: 0 }}) => {
         const [showModal, setShowModal] = useState(false)
         const [showEditModal, setShowEditModal] = useState(false)
         const [searchQuery,setSearchQuery] = useState('')
-        const filteredInvoices = (client.invoices || []).filter((invoice) =>
+        const filteredInvoices = (invoices.data || []).filter((invoice) =>
    (invoice.invoice_number || '').toLowerCase().includes(searchQuery.toLowerCase())
 )
         const handleEditOpen = () => {
@@ -136,10 +136,20 @@ className="pl-10 pr-4 py-2 bg-surface-container border-none text-body-md font-bo
 </table>
 </div>
 <div className="p-4 border-t border-outline-variant flex items-center justify-between">
-<span className="text-label-sm font-label-sm text-on-surface-variant">Showing 5 of 42 invoices</span>
+<span className="text-label-sm font-label-sm text-on-surface-variant">
+  Showing {invoices.from} to {invoices.to} of {invoices.total} invoices
+</span>
 <div className="flex items-center gap-2">
-<button className="p-1 rounded hover:bg-surface-container"><span className="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
-<button className="p-1 rounded hover:bg-surface-container"><span className="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+{invoices.links.map((link, index) => (
+    <Link
+        key={index}
+        href={link.url || '#'}
+        className={`px-3 py-1 rounded font-label-sm text-label-sm transition-colors ${
+            link.active ? 'bg-primary text-on-primary' : 'hover:bg-surface-variant'
+        } ${!link.url ? 'opacity-50 pointer-events-none' : ''}`}
+        dangerouslySetInnerHTML={{ __html: link.label }}
+    />
+))}
 </div>
 </div>
 </div>
