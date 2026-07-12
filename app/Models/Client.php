@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Invoice;
+use App\Models\Traits\HasBusinessScope;
 
 class Client extends Model
 {
+
+    use  HasBusinessScope;
     protected $fillable = [
         'business_id',
         'name',

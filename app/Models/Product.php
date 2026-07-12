@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Traits\HasBusinessScope;
 class Product extends Model
 {
+    use HasBusinessScope;
     protected $fillable =[
           
              'business_id',
