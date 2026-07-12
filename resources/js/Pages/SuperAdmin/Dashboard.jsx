@@ -1,6 +1,9 @@
 import React from 'react'
 import SuperadminLayout from '@/Layouts/SuperadminLayout'
+import CompanyModal from '../../Components/CompanyModal'
+import {useState} from 'react'
 const Dashboard = () => {
+    const [showModal,setShowModal] = useState(false)
   return (
     <SuperadminLayout title="Dashboard">
     <div>
@@ -64,7 +67,7 @@ const Dashboard = () => {
 <section className="mt-xl relative z-10">
     <div className="flex items-center justify-between mb-lg">
         <h3 className="font-headline-md text-headline-md text-on-surface">Recently Added Companies</h3>
-        <button className="px-md py-sm bg-on-primary-fixed-variant text-primary-fixed-dim rounded-lg font-label-md text-label-md flex items-center gap-2 hover:opacity-90 transition-opacity">
+        <button onClick={() => setShowModal(true)} className="px-md py-sm bg-on-primary-fixed-variant text-primary-fixed-dim rounded-lg font-label-md text-label-md flex items-center gap-2 hover:opacity-90 transition-opacity">
             <span className="material-symbols-outlined text-[20px]" data-icon="add">add</span>
             Register New Company
         </button>
@@ -232,6 +235,7 @@ const Dashboard = () => {
     </div>
 </div>
     </div>
+    <CompanyModal  show={showModal} onClose={() => setShowModal(false)}/>
     </SuperadminLayout>
   )
 }
