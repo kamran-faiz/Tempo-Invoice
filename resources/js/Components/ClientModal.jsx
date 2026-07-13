@@ -1,192 +1,271 @@
 import React from 'react'
-import { useForm} from '@inertiajs/react'
+import { useForm } from '@inertiajs/react'
 import { useEffect } from 'react'
 
-
-const ClientModal = ({show , onClose , client}) => {
+const ClientModal = ({ show, onClose, client }) => {
     const form = useForm({
-    name:client?.name || '',
-    email:client?.email || '',
-    phone:client?.phone || '',
-    city:client?.city || '',
-    address:client?.address || '',
-    ntn:client?.ntn || '',
-    cnic:client?.cnic || '',
-    client_type:client?.client_type || 'b2b',
-    business_id:client?.business_id || '',        
-
+        name: client?.name || '',
+        email: client?.email || '',
+        phone: client?.phone || '',
+        city: client?.city || '',
+        address: client?.address || '',
+        ntn: client?.ntn || '',
+        cnic: client?.cnic || '',
+        client_type: client?.client_type || 'b2b',
+        business_id: client?.business_id || '',
     });
-useEffect(() => {
-    if(client) {
-        form.setData({
-            name: client.name || '',
-            email: client.email || '',
-            phone: client.phone || '',
-            city: client.city || '',
-            address: client.address || '',
-            ntn: client.ntn || '',
-            cnic: client.cnic || '',
-            client_type: client.client_type || 'b2b',
-            business_id: client.business_id || '',
-        })
-    } else {
-        form.reset()
-    }
-}, [client])
+
+    useEffect(() => {
+        if (client) {
+            form.setData({
+                name: client.name || '',
+                email: client.email || '',
+                phone: client.phone || '',
+                city: client.city || '',
+                address: client.address || '',
+                ntn: client.ntn || '',
+                cnic: client.cnic || '',
+                client_type: client.client_type || 'b2b',
+                business_id: client.business_id || '',
+            })
+        } else {
+            form.reset()
+        }
+    }, [client])
 
     const handleSubmit = () => {
-        if(client){
-            form.put(route('clients.update',client.id),{
-                onSuccess: () =>{
+        if (client) {
+            form.put(route('clients.update', client.id), {
+                onSuccess: () => {
                     onClose();
                     form.reset();
                 }
             })
-        }else{
-       form.post(route('clients.store'),{
-        onSuccess: () => {
-            onClose();
-             form.reset();
+        } else {
+            form.post(route('clients.store'), {
+                onSuccess: () => {
+                    onClose();
+                    form.reset();
+                }
+            })
         }
-       })
-       }
     }
-  return (
-  <>
-{show && (
-<div  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 
-<div className="bg-white w-[560px] max-h-[90vh] overflow-y-auto rounded-xl shadow-2xl border border-outline-variant flex flex-col animate-in fade-in zoom-in duration-300">
+    return (
+        <>
+            {show && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
 
-<div className="px-8 py-6 flex justify-between items-center border-b border-outline-variant sticky top-0 bg-white z-10">
-<h2 className="font-headline-md text-headline-md text-on-surface font-bold">{client ? 'Edit Client' : 'Add Client'}</h2>
-<button onClick={onClose} className="text-outline hover:text-on-surface transition-colors">
-<span className="material-symbols-outlined">close</span>
-</button>
-</div>
+                    <div className="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl shadow-xl border border-gray-200 flex flex-col">
 
-<div className="px-8 py-8 space-y-8">
+                        {/* Header */}
+                        <div className="px-6 py-5 flex justify-between items-center border-b border-gray-200 sticky top-0 bg-white z-10">
+                            <h2 className="text-lg font-semibold text-gray-900">
+                                {client ? 'Edit Client' : 'Add Client'}
+                            </h2>
+                            <button
+                                onClick={onClose}
+                                className="text-gray-400 hover:text-gray-700 transition-colors"
+                            >
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
 
-<div className="flex gap-4">
-<button onClick={() => form.setData('client_type', 'b2b') } className={`flex-1 py-3 px-4 border-2 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-all ${form.data.client_type === 'b2b' ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant text-secondary hover:border-outline'}`}>
-<span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>business</span>
-                        B2B
-                    </button>
-<button onClick={() => form.setData('client_type', 'b2c') } className={`flex-1 py-3 px-4 border-2 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-all ${form.data.client_type === 'b2c' ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant text-secondary hover:border-outline'}`}>
-<span className="material-symbols-outlined">person</span>
-                        B2C
-                    </button>
-</div>
+                        {/* Body */}
+                        <div className="px-6 py-6 space-y-6">
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-<div className="col-span-2 space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">Business Name</label>
-<input 
-value={form.data.name}
-onChange={e => form.setData('name', e.target.value)} 
-className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg
- focus:ring-2 focus:ring-primary/20 focus:border-primary 
- outline-none transition-all font-body-md text-body-md" placeholder="e.g. Acme Corp Pakistan" type="text"/>
- {form.errors.name && <p className="text-error text-label-sm">{form.errors.name}</p>}
-</div>
-{form.data.client_type === 'b2b' ? (
-    <div className="space-y-2">
-        <label className="font-label-md text-label-md text-on-surface-variant block">NTN Number</label>
-        {/* FIX 1: Restored complete valid input element */}
-        <input value={form.data.ntn} onChange={e => form.setData('ntn', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXXXX-X" type="text"/>
-        {/* FIX 2: Corrected error binding from client_type to ntn */}
-        {form.errors.ntn && <p className="text-error text-label-sm">{form.errors.ntn}</p>}
-    </div>
-) : (
-    <div className="space-y-2">
-        <label className="font-label-md text-label-md text-on-surface-variant block">CNIC Number</label>
-        <input value={form.data.cnic} onChange={e => form.setData('cnic', e.target.value)} className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="XXXXX-XXXXXXX-X" type="text"/>
-        {form.errors.cnic && <p className="text-error text-label-sm">{form.errors.cnic}</p>}
-    </div>
-)}
+                            {/* Client type toggle */}
+                            <div className="flex gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => form.setData('client_type', 'b2b')}
+                                    className={`flex-1 py-2.5 px-4 border rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                                        form.data.client_type === 'b2b'
+                                            ? 'border-blue-600 bg-blue-600 text-white'
+                                            : 'border-gray-300 text-gray-600 hover:border-gray-400'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-base">business</span>
+                                    B2B
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => form.setData('client_type', 'b2c')}
+                                    className={`flex-1 py-2.5 px-4 border rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                                        form.data.client_type === 'b2c'
+                                            ? 'border-blue-600 bg-blue-600 text-white'
+                                            : 'border-gray-300 text-gray-600 hover:border-gray-400'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-base">person</span>
+                                    B2C
+                                </button>
+                            </div>
 
+                            {/* Form grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
 
-<div className="space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">Phone</label>
-<input
-value={form.data.phone}
-onChange={e => form.setData('phone', e.target.value)} 
-className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg 
-focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all 
-font-body-md text-body-md" placeholder="+92 XXX XXXXXXX" type="tel"/>
-{form.errors.phone && <p className="text-error text-label-sm">{form.errors.phone}</p>}
-</div>
-<div className="space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">Email</label>
-<input
-value={form.data.email}
-onChange={e => form.setData('email', e.target.value)} 
-className="w-full px-4 py-2.5 bg-white border border-outline-variant rounded-lg 
-focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none 
-transition-all font-body-md text-body-md" placeholder="client@company.com" type="email"/>
-{form.errors.email && <p className="text-error text-label-sm">{form.errors.email}</p>}
-</div>
-<div className="col-span-2 space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">City</label>
-<div className="relative">
-<select value={form.data.city}
-onChange={e => form.setData('city', e.target.value)} className="w-full px-4 py-2.5
-bg-white border border-outline-variant rounded-lg 
-focus:ring-2 focus:ring-primary/20 focus:border-primary 
-outline-none transition-all font-body-md text-body-md appearance-none">
-    
-<option value="">Select City</option>
-<option value="Karachi">Karachi</option>
-<option value="Lahore">Lahore</option>
-<option value="Islamabad">Islamabad</option>
+                                <div className="col-span-2 space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-600 block">
+                                        Business Name
+                                    </label>
+                                    <input
+                                        value={form.data.name}
+                                        onChange={e => form.setData('name', e.target.value)}
+                                        className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                        placeholder="e.g. Acme Corp Pakistan"
+                                        type="text"
+                                    />
+                                    {form.errors.name && (
+                                        <p className="text-red-600 text-xs">{form.errors.name}</p>
+                                    )}
+                                </div>
 
-</select>
-{form.errors.city && <p className="text-error text-label-sm">{form.errors.city}</p>}
-<span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
-</div>
-</div>
-<div className="col-span-2 space-y-2">
-<label className="font-label-md text-label-md text-on-surface-variant block">Address</label>
-<textarea 
-value={form.data.address}
-onChange={e => form.setData('address',e.target.value)}
-className="w-full px-4 py-2.5 bg-white border border-outline-variant 
-rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary
-outline-none transition-all font-body-md text-body-md resize-none" 
-placeholder="Full postal address" rows="3"></textarea>
-{form.errors.address && <p className="text-error text-label-sm">{form.errors.address}</p>}
-</div>
-</div>
+                                {form.data.client_type === 'b2b' ? (
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-medium text-gray-600 block">
+                                            NTN Number
+                                        </label>
+                                        <input
+                                            value={form.data.ntn}
+                                            onChange={e => form.setData('ntn', e.target.value)}
+                                            className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                            placeholder="XXXXXXX-X"
+                                            type="text"
+                                        />
+                                        {form.errors.ntn && (
+                                            <p className="text-red-600 text-xs">{form.errors.ntn}</p>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-medium text-gray-600 block">
+                                            CNIC Number
+                                        </label>
+                                        <input
+                                            value={form.data.cnic}
+                                            onChange={e => form.setData('cnic', e.target.value)}
+                                            className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                            placeholder="XXXXX-XXXXXXX-X"
+                                            type="text"
+                                        />
+                                        {form.errors.cnic && (
+                                            <p className="text-red-600 text-xs">{form.errors.cnic}</p>
+                                        )}
+                                    </div>
+                                )}
 
-<div className="p-4 bg-tertiary/5 rounded-lg border border-tertiary/20 flex items-center gap-4">
-<div className="w-10 h-10 rounded-full border-4 border-tertiary/20 border-t-tertiary flex items-center justify-center">
-<span className="material-symbols-outlined text-tertiary text-[20px]" style={{fontVariationSettings: "'wght' 700"}}>check</span>
-</div>
-<div>
-<h4 className="font-label-md text-label-md text-tertiary font-bold">FBR Verification Ready</h4>
-<p className="font-body-md text-body-md text-on-surface-variant">NTN will be auto-validated with federal records upon saving.</p>
-</div>
-</div>
-</div>
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-600 block">
+                                        Phone
+                                    </label>
+                                    <input
+                                        value={form.data.phone}
+                                        onChange={e => form.setData('phone', e.target.value)}
+                                        className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                        placeholder="+92 XXX XXXXXXX"
+                                        type="tel"
+                                    />
+                                    {form.errors.phone && (
+                                        <p className="text-red-600 text-xs">{form.errors.phone}</p>
+                                    )}
+                                </div>
 
-<div className="px-8 py-6 border-t border-outline-variant bg-surface-container-lowest flex justify-end gap-3 sticky bottom-0">
-<button onClick={onClose} type="button" className="px-6 py-2.5 border border-outline-variant text-secondary hover:bg-surface-container-low rounded-lg font-label-md text-label-md transition-all">
-                    Cancel
-                </button>
-{/* FIX 3: Added physical disabled state to lock click events while submitting */}
-<button 
-    onClick={handleSubmit} 
-    disabled={form.processing}
-    className="px-8 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
->
-    {form.processing ? 'Saving...' : (client ? 'Update Client' : 'Save Client')}
-</button>
-</div>
-</div>
-</div>
-)}
-</> 
-  )
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-600 block">
+                                        Email
+                                    </label>
+                                    <input
+                                        value={form.data.email}
+                                        onChange={e => form.setData('email', e.target.value)}
+                                        className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                        placeholder="client@company.com"
+                                        type="email"
+                                    />
+                                    {form.errors.email && (
+                                        <p className="text-red-600 text-xs">{form.errors.email}</p>
+                                    )}
+                                </div>
+
+                                <div className="col-span-2 space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-600 block">
+                                        City
+                                    </label>
+                                    <div className="relative">
+                                        <select
+                                            value={form.data.city}
+                                            onChange={e => form.setData('city', e.target.value)}
+                                            className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all appearance-none"
+                                        >
+                                            <option value="">Select City</option>
+                                            <option value="Karachi">Karachi</option>
+                                            <option value="Lahore">Lahore</option>
+                                            <option value="Islamabad">Islamabad</option>
+                                        </select>
+                                        <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-lg">
+                                            expand_more
+                                        </span>
+                                    </div>
+                                    {form.errors.city && (
+                                        <p className="text-red-600 text-xs">{form.errors.city}</p>
+                                    )}
+                                </div>
+
+                                <div className="col-span-2 space-y-1.5">
+                                    <label className="text-sm font-medium text-gray-600 block">
+                                        Address
+                                    </label>
+                                    <textarea
+                                        value={form.data.address}
+                                        onChange={e => form.setData('address', e.target.value)}
+                                        className="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none"
+                                        placeholder="Full postal address"
+                                        rows="3"
+                                    ></textarea>
+                                    {form.errors.address && (
+                                        <p className="text-red-600 text-xs">{form.errors.address}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* FBR notice */}
+                            <div className="p-4 bg-green-50 rounded-lg border border-green-200 flex items-center gap-3">
+                                <div className="w-9 h-9 shrink-0 rounded-full bg-green-100 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-green-600 text-lg">check</span>
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-semibold text-green-800">
+                                        FBR Verification Ready
+                                    </h4>
+                                    <p className="text-sm text-green-700">
+                                        NTN will be auto-validated with federal records upon saving.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-3 sticky bottom-0">
+                            <button
+                                onClick={onClose}
+                                type="button"
+                                className="px-5 py-2 border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleSubmit}
+                                disabled={form.processing}
+                                className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium shadow-sm hover:bg-blue-700 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                                {form.processing ? 'Saving...' : (client ? 'Update Client' : 'Save Client')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    )
 }
 
 export default ClientModal

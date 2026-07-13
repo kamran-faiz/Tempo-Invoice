@@ -10,4 +10,9 @@ class Business extends Model
             'name',
             'owner_name'
     ];
+
+    public function users()
+    {
+        return $this->hasOne(User::class);
+    }
 }

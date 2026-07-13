@@ -2,7 +2,7 @@ import React from 'react'
 import SuperadminLayout from '@/Layouts/SuperadminLayout'
 import CompanyModal from '../../Components/CompanyModal'
 import {useState} from 'react'
-const Dashboard = () => {
+const Dashboard = ({companies}) => {
     const [showModal,setShowModal] = useState(false)
   return (
     <SuperadminLayout title="Dashboard">
@@ -77,85 +77,54 @@ const Dashboard = () => {
             <thead>
                 <tr className="bg-surface-container-high/50 border-b border-outline-variant">
                     <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Company Name</th>
-                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Sector</th>
-                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Date Created</th>
-                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Invoice Count</th>
-                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant text-right">Status</th>
+                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Owner</th>
+                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Admin</th>
+                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Email</th>
+                    <th className="px-lg py-md font-label-md text-label-md text-on-surface-variant">Actions</th>
+
                 </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/30">
-                <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
+            {companies.map(business => (
+                <tr key={business.id} className="hover:bg-white/5 transition-colors group cursor-pointer">
                     <td className="px-lg py-md">
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center font-bold text-primary-fixed">IT</div>
-                            <span className="font-body-md text-body-md text-on-surface">Indus Tech Solutions</span>
+                            <span className="font-body-md text-body-md text-on-surface">{business.name}</span>
                         </div>
                     </td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">Software Dev</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">May 12, 2026</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface">1,240</td>
-                    <td className="px-lg py-md text-right">
-                        <span className="px-2 py-1 bg-green-400/10 text-green-400 text-[10px] font-bold rounded uppercase tracking-widest border border-green-400/20">Active</span>
-                    </td>
+                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">{business.owner_name}</td>
+                    {/* <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">{business.user.name}</td> */}
+                    {/* <td className="px-lg py-md font-body-md text-body-md text-on-surface">{business.user.email}</td> */}
+                    <td className="px-6 py-4 text-center">
+                                            <div className="flex items-center justify-center gap-2">
+                                                <button 
+                                             className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-on-surface-variant"
+                                                  >
+                                            <span className="material-symbols-outlined text-[18px]">visibility</span>
+                                        </button>
+                                                <button 
+                                                    
+                                                    className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-primary"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px]">edit</span>
+                                                </button>
+                                                <button 
+                                                   
+                                                    className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-error"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                                                </button>
+                                                
+                                               
+                                                
+                                            </div>
+                                        </td>
                 </tr>
-                <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
-                    <td className="px-lg py-md">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center font-bold text-primary-fixed">KL</div>
-                            <span className="font-body-md text-body-md text-on-surface">Khyber Logistics</span>
-                        </div>
-                    </td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">Supply Chain</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">May 10, 2026</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface">843</td>
-                    <td className="px-lg py-md text-right">
-                        <span className="px-2 py-1 bg-green-400/10 text-green-400 text-[10px] font-bold rounded uppercase tracking-widest border border-green-400/20">Active</span>
-                    </td>
-                </tr>
-                <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
-                    <td className="px-lg py-md">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center font-bold text-primary-fixed">HA</div>
-                            <span className="font-body-md text-body-md text-on-surface">Habib Architects</span>
-                        </div>
-                    </td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">Construction</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">May 09, 2026</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface">215</td>
-                    <td className="px-lg py-md text-right">
-                        <span className="px-2 py-1 bg-yellow-400/10 text-yellow-400 text-[10px] font-bold rounded uppercase tracking-widest border border-yellow-400/20">Pending</span>
-                    </td>
-                </tr>
-                <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
-                    <td className="px-lg py-md">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center font-bold text-primary-fixed">ZS</div>
-                            <span className="font-body-md text-body-md text-on-surface">Zafar &amp; Sons Traders</span>
-                        </div>
-                    </td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">Wholesale</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">May 08, 2026</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface">4,512</td>
-                    <td className="px-lg py-md text-right">
-                        <span className="px-2 py-1 bg-green-400/10 text-green-400 text-[10px] font-bold rounded uppercase tracking-widest border border-green-400/20">Active</span>
-                    </td>
-                </tr>
-                <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
-                    <td className="px-lg py-md">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center font-bold text-primary-fixed">PP</div>
-                            <span className="font-body-md text-body-md text-on-surface">Peak Performance Gyms</span>
-                        </div>
-                    </td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">Services</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">May 05, 2026</td>
-                    <td className="px-lg py-md font-body-md text-body-md text-on-surface">92</td>
-                    <td className="px-lg py-md text-right">
-                        <span className="px-2 py-1 bg-error/10 text-error text-[10px] font-bold rounded uppercase tracking-widest border border-error/20">Suspended</span>
-                    </td>
-                </tr>
+                )) }
             </tbody>
         </table>
+        
         <div className="p-lg bg-surface-container-high/30 border-t border-outline-variant flex items-center justify-between">
             <span className="font-label-sm text-label-sm text-on-surface-variant">Showing 5 of 1,284 companies</span>
             <div className="flex gap-2">

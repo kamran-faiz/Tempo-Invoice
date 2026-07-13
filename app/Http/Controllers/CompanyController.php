@@ -6,10 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Business;
+use Inertia\Inertia;
 use App\Models\User;
 
 class CompanyController extends Controller
 {
+
+     public function index(){
+         $companies = Business::with('users')->get();
+         return Inertia::render('SuperAdmin/Dashboard', ['companies' => $companies]);
+
+     }
     public function store(Request $request){
         $request->validate([
             'name' => 'required|string|max:255',
@@ -36,4 +43,6 @@ class CompanyController extends Controller
 
 
     }
+
+
 }
