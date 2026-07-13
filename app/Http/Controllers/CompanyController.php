@@ -44,5 +44,15 @@ class CompanyController extends Controller
 
     }
 
+    public function destroy(Business $company){
+        DB::transaction(function() use ($company){
+            $company->users()->delete();
+            $company->delete();
+        });
+        return redirect()->back()->with('success', 'Company deleted successfully');
+    }
+
+
+
 
 }

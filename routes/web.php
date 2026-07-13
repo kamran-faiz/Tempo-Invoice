@@ -19,7 +19,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fbr-logs', [FbrLogController::class, 'index']);
 Route::get('/superadmin/dashboard', [CompanyController::class, 'index'])
     ->name('superadmin.dashboard');    
-    Route::resource('superadmin/companies', CompanyController::class)->only(['store']);
+    Route::resource('superadmin/companies', CompanyController::class)->only(['store','destroy']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

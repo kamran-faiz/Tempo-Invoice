@@ -2,8 +2,13 @@ import React from 'react'
 import SuperadminLayout from '@/Layouts/SuperadminLayout'
 import CompanyModal from '../../Components/CompanyModal'
 import {useState} from 'react'
+import { router } from '@inertiajs/react'
 const Dashboard = ({companies}) => {
     const [showModal,setShowModal] = useState(false)
+    const deleteCompany = (id) => {
+        if(!confirm('Are you sure you want to delete this Company')) return;
+        router.delete(route('companies.destroy',id))
+    }
   return (
     <SuperadminLayout title="Dashboard">
     <div>
@@ -94,8 +99,9 @@ const Dashboard = ({companies}) => {
                         </div>
                     </td>
                     <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">{business.owner_name}</td>
-                    {/* <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant">{business.user.name}</td> */}
-                    {/* <td className="px-lg py-md font-body-md text-body-md text-on-surface">{business.user.email}</td> */}
+                     <td className="px-lg py-md font-body-md text-body-md text-on-surface-variant"> {business.users?.[0]?.name}</td> 
+                     <td className="px-lg py-md font-body-md text-body-md text-on-surface">    {business.users?.[0]?.email}
+</td> 
                     <td className="px-6 py-4 text-center">
                                             <div className="flex items-center justify-center gap-2">
                                                 <button 
@@ -109,17 +115,17 @@ const Dashboard = ({companies}) => {
                                                 >
                                                     <span className="material-symbols-outlined text-[18px]">edit</span>
                                                 </button>
-                                                <button 
+                                                <button onClick={() => deleteCompany(business.id)}
                                                    
                                                     className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-error"
                                                 >
                                                     <span className="material-symbols-outlined text-[18px]">delete</span>
-                                                </button>
+                    </button>
                                                 
                                                
                                                 
-                                            </div>
-                                        </td>
+                    </div>
+                </td>
                 </tr>
                 )) }
             </tbody>
