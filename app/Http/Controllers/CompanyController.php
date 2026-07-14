@@ -39,7 +39,7 @@ class CompanyController extends Controller
                      
             
         });
-                    return redirect()->back()->with('success', 'Company Registered successfully');
+        return redirect()->back()->with('success', 'Company Registered successfully');
 
 
     }

@@ -9,6 +9,9 @@ const Dashboard = ({companies}) => {
         if(!confirm('Are you sure you want to delete this Company')) return;
         router.delete(route('companies.destroy',id))
     }
+    const showCompany = (id) => {
+        router.get(route('companies.show',id))
+    }
   return (
     <SuperadminLayout title="Dashboard">
     <div>
@@ -104,7 +107,7 @@ const Dashboard = ({companies}) => {
 </td> 
                     <td className="px-6 py-4 text-center">
                                             <div className="flex items-center justify-center gap-2">
-                                                <button 
+                                                <button onClick={() => showCompany(business.id)}
                                              className="p-1.5 hover:bg-surface-container-high rounded transition-colors text-on-surface-variant"
                                                   >
                                             <span className="material-symbols-outlined text-[18px]">visibility</span>
