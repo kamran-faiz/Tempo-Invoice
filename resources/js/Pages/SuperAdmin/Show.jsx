@@ -1,7 +1,9 @@
+import SuperAdminLayout from '@/Layouts/SuperadminLayout'
 import React from 'react'
 
 const Show = () => {
   return (
+    <SuperAdminLayout title="Companies">
     <div>
       <div className="relative z-10">
 <p className="font-body-md text-body-md text-on-surface-variant">Sector: <span className="text-on-surface font-medium">Logistics &amp; Shipping</span> | Member Since: <span className="text-on-surface font-medium">Jan 12, 2024</span></p>
@@ -157,6 +159,7 @@ const Show = () => {
 </section>
 </div>
     </div>
+    </SuperAdminLayout>
   )
 }
 
