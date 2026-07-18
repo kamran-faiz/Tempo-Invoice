@@ -24,10 +24,6 @@ export default function SuperAdminLayout({ title, children }) {
                         <span className="material-symbols-outlined">dashboard</span>
                         <span className="font-label-md text-label-md">Dashboard</span>
                     </Link>
-                    <Link className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-label-md text-label-md ${url.startsWith('/superadmin/companies') ? 'text-primary-fixed-dim bg-on-primary-fixed-variant font-bold opacity-90' : 'text-secondary-fixed-dim hover:text-primary-fixed-dim hover:bg-on-primary-fixed-variant'}`} href="/superadmin/companies">
-                        <span className="material-symbols-outlined">apartment</span>
-                        <span className="font-label-md text-label-md">Companies</span>
-                    </Link>
                 </nav>
 
                 <div className="pt-6 border-t border-outline-variant/20 space-y-4">
@@ -36,14 +32,19 @@ export default function SuperAdminLayout({ title, children }) {
                             <img className="w-full h-full object-cover" alt="Superadmin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9KalizLILOQTTwsJ60E5kUvmBr3FN3zhmPY-akpNemlslL9e6eH170SvhlzvmRhwhfGRz7D5_bDGOTEvrvfHzGCvtkF2OeIG5gPKm4j_LBw_-Qtylsv5WBhV-AvFIxqsqQUihPL01IAvVl3ga9vTu5HAZGRpA8-Dtk1o-sNC5VIZOveCdVogk82SDxoGixqkgJof-nlUMk8dE-DqiaCMKVb9sWC0D-QcujwJBjX3NiPlM2RqKO1f68N4ZVuX4-KueUqErVMhCTNP8" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-label-md text-label-md text-primary-fixed-dim">Ali Khan</span>
+                            <span className="font-label-md text-label-md text-primary-fixed-dim">Kamran Faiz</span>
                             <span className="px-2 py-0.5 bg-on-primary-fixed-variant/50 text-[10px] font-bold text-primary rounded-full w-max uppercase tracking-widest">Superadmin</span>
                         </div>
                     </div>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 text-error hover:bg-error/10 rounded-lg transition-colors">
+                    <Link
+                        href={route('logout')}
+                        method="post"
+                        as="button"
+                        className="flex items-center gap-3 px-4 py-3 text-error hover:bg-error/10 rounded-lg transition-colors w-full text-left"
+                    >
                         <span className="material-symbols-outlined">logout</span>
                         <span className="font-label-md text-label-md">Logout</span>
-                    </button>
+                    </Link>
                 </div>
             </aside>
 
