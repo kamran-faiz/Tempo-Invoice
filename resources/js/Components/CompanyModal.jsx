@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from '@inertiajs/react'
 
-const CompanyModal = ({ show, onClose }) => {
-    const { data, setData, post, processing, errors, reset } = useForm({
+const CompanyModal = ({ show, company, onClose }) => {
+    const isEditMode = Boolean(company)
+
+    const { data, setData, post, put, processing, errors, reset } = useForm({
         name: '',
         owner_name: '',
         user: {
@@ -13,23 +15,52 @@ const CompanyModal = ({ show, onClose }) => {
         },
     })
 
+    useEffect(() => {
+        if (company) {
+            setData({
+                name: company.name ?? '',
+                owner_name: company.owner_name ?? '',
+                user: {
+                    name: company.users?.[0]?.name ?? '',
+                    email: company.users?.[0]?.email ?? '',
+                    password: '',
+                    password_confirmation: '',
+                },
+            })
+        } else {
+            reset()
+        }
+    }, [company])
+
     if (!show) return null
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        post(route('companies.store'), {
-            onSuccess: () => {
-                reset()
-                onClose()
-            },
-        })
+
+        if (isEditMode) {
+            put(route('companies.update', company.id), {
+                onSuccess: () => {
+                    reset()
+                    onClose()
+                },
+            })
+        } else {
+            post(route('companies.store'), {
+                onSuccess: () => {
+                    reset()
+                    onClose()
+                },
+            })
+        }
     }
 
     return (
         <div className="fixed inset-0 glass-overlay flex items-center justify-center z-50 p-6 overflow-y-auto">
             <div className="glass-panel w-full max-w-2xl rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300">
                 <div className="px-xl py-lg border-b border-outline-variant flex justify-between items-center bg-white/5">
-                    <h2 className="font-headline-md text-headline-md text-primary-fixed-dim">Register New Company</h2>
+                    <h2 className="font-headline-md text-headline-md text-primary-fixed-dim">
+                        {isEditMode ? 'Edit Company' : 'Register New Company'}
+                    </h2>
                     <button type="button" onClick={onClose} className="text-on-surface-variant hover:text-on-surface transition-colors p-2">
                         <span className="material-symbols-outlined">close</span>
                     </button>
@@ -102,7 +133,9 @@ const CompanyModal = ({ show, onClose }) => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
                             <div className="space-y-xs">
-                                <label className="font-label-sm text-label-sm text-on-surface-variant">Password</label>
+                                <label className="font-label-sm text-label-sm text-on-surface-variant">
+                                    Password {isEditMode && <span className="opacity-60 normal-case">(leave blank to keep current)</span>}
+                                </label>
                                 <input
                                     className="w-full bg-surface-container-lowest border border-outline-variant rounded px-4 py-3 text-on-surface focus:border-primary-fixed-dim transition-all"
                                     placeholder="••••••••"
@@ -130,7 +163,7 @@ const CompanyModal = ({ show, onClose }) => {
                             Cancel
                         </button>
                         <button type="submit" disabled={processing} className="px-8 py-3 rounded-lg font-label-md text-label-md bg-on-primary-fixed-variant text-white font-bold hover:opacity-90 shadow-lg shadow-indigo-900/20 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-50">
-                            Create Company
+                            {isEditMode ? 'Update Company' : 'Create Company'}
                             <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                         </button>
                     </div>
