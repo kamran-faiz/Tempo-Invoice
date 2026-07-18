@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Business;
+use App\Models\Client;
+use App\Models\Invoice;
 use Inertia\Inertia;
 use App\Models\User;
 
@@ -15,7 +17,18 @@ class CompanyController extends Controller
 
      public function index(){
          $companies = Business::with('users')->get();
-         return Inertia::render('SuperAdmin/Dashboard', ['companies' => $companies]);
+
+         $metrics = [
+             'total_companies' => Business::count(),
+             'total_clients'   => Client::withoutGlobalScopes()->count(),
+             'total_invoices'  => Invoice::withoutGlobalScopes()->count(),
+             'total_revenue'   => Invoice::withoutGlobalScopes()->sum('total'),
+         ];
+
+         return Inertia::render('SuperAdmin/Dashboard', [
+             'companies' => $companies,
+             'metrics' => $metrics,
+         ]);
 
      }
     public function store(Request $request){
