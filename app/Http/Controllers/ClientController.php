@@ -19,7 +19,7 @@ class ClientController extends Controller
 
     public function store(Request $request){
         $validated = $request->validate([
-            'business_id' => 'nullable',
+            
             'name' => 'required|string|max:100',
             'email' => 'nullable|email',
             'phone' => 'nullable|string',
@@ -31,14 +31,22 @@ class ClientController extends Controller
 
 
         ]);
-        $validated['business_id'] = 1;
+        $businessId = auth()->user()?->business_id;
+
+        if (!$businessId) {
+            return redirect()->back()->withErrors([
+                'business' => 'No business is assigned to the current user.',
+            ]);
+        }
+
+        $validated['business_id'] = $businessId;
         Client::create($validated);
         return redirect()->back()->with('success', 'Client Created Successfully');
     }
 
     public function update(Request $request, Client $client){
         $validated = $request->validate([
-         'business_id' => 'nullable',
+         
             'name' => 'required|string|max:100',
             'email' => 'nullable|email',
             'phone' => 'nullable|string',

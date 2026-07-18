@@ -9,11 +9,9 @@ trait HasBusinessScope
 {
     static::addGlobalScope(new BusinessScope());
     static::creating(function ($model) {
-       
-   
-     if(auth()->check()){
+        if (auth()->check() && empty($model->business_id)) {
             $model->business_id = auth()->user()->business_id;
         }
-         });
+    });
 } 
 }

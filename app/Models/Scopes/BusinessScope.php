@@ -13,8 +13,8 @@ class BusinessScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if(auth()->check()){
-            $builder->where('business_id',auth()->user()->business_id);
+        if (auth()->check() && !auth()->user()->is_superadmin && auth()->user()->business_id) {
+            $builder->where('business_id', auth()->user()->business_id);
         }
     }
 }

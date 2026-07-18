@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Business;
 use Inertia\Inertia;
 use App\Models\User;
@@ -36,8 +37,8 @@ class CompanyController extends Controller
                 'password' => Hash::make($request->input('user.password')),
                 'business_id' => $business->id,
             ]);
-                     
-            
+
+            Auth::login($user);
         });
         return redirect()->back()->with('success', 'Company Registered successfully');
 

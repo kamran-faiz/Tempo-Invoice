@@ -52,10 +52,15 @@ class InvoiceController extends Controller
               'payment_status' => 'required|in:paid,unpaid,overdue',
 
         ]);
-        $year = date('Y');
-$count = Invoice::count();
-$sequence = str_pad($count + 1, 4, '0', STR_PAD_LEFT);
-$validated['invoice_number'] = 'INV-' . $year . '-' . $sequence;
+       $year = date('Y');
+$businessId = auth()->user()->business_id;
+
+$lastNumber = Invoice::where('business_id', $businessId)
+    ->where('invoice_number', 'like', "INV-{$businessId}-{$year}-%")
+    ->max('invoice_number');
+
+$nextSeq = $lastNumber ? ((int) substr($lastNumber, -4)) + 1 : 1;
+$validated['invoice_number'] = "INV-{$businessId}-{$year}-" . str_pad($nextSeq, 4, '0', STR_PAD_LEFT);
 
         DB::transaction(function() use ($validated){
               $invoice = Invoice::create([

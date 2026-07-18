@@ -17,7 +17,7 @@ class ProductController extends Controller
 
     public function store(Request $request){
         $validated = $request -> validate([
-            'business_id' => 'nullable',
+            
             'name' => 'string|required',
             'description' => 'string|nullable',
             'unit_price' => 'numeric|required',
@@ -26,14 +26,22 @@ class ProductController extends Controller
             'is_active' => 'boolean'
 
         ]);
-         $validated['business_id'] = 1;
+        $businessId = auth()->user()?->business_id;
+
+        if (!$businessId) {
+            return redirect()->back()->withErrors([
+                'business' => 'No business is assigned to the current user.',
+            ]);
+        }
+
+        $validated['business_id'] = $businessId;
         Product::create($validated);
         return redirect()->back()->with('success', 'Product Created Successfully');
     }
 
    public function update(Request $request, Product $product){
           $validated = $request -> validate([
-            'business_id' => 'nullable',
+            
             'name' => 'string|required',
             'description' => 'string|nullable',
             'unit_price' => 'numeric|required',
