@@ -44,7 +44,33 @@ class CompanyController extends Controller
 
 
     }
+    
+    public function update(Request $request , Business $company){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'owner_name' => 'required|string|max:255',
+            'user.name' => 'required|string|max:255',
+            'user.email' => 'required|email|unique:users,email,' .$company->users->first()->id,
+            'user.password' => 'nullable|min:8|confirmed',
+        ]);
+        DB::transaction(function () use($request , $company){
+             $company->update([
+                'name' => $request->name,
+                'owner_name' => $request->owner_name,
+             ]);
+             $userData =[
+                'name' => $request->input('user.name'),
+                'email' => $request->input('user.email')
+             ];
+       if ($request->filled('user.password')) {
+            $userData['password'] = Hash::make($request->input('user.password'));
+        }
 
+        $company->users->first()->update($userData);
+    });
+
+    return redirect()->back()->with('success', 'Company updated successfully');
+    }
     public function destroy(Business $company){
         DB::transaction(function() use ($company){
             $company->users()->delete();
