@@ -112,6 +112,34 @@
     gap: var(--spacing-gutter);
 }
 
+@utility p-margin_mobile {
+    padding: 16px;
+}
+
+@utility p-margin_desktop {
+    padding: 32px;
+}
+
+@utility px-margin_desktop {
+    padding-inline: 32px;
+}
+
+@utility mb-stack_md {
+    margin-bottom: 16px;
+}
+
+@utility mt-stack_lg {
+    margin-top: 24px;
+}
+
+@utility py-stack_md {
+    padding-block: 16px;
+}
+
+@utility max-w-container_max_width {
+    max-width: 1440px;
+}
+
 body {
     font-family: 'Inter', sans-serif;
 }
@@ -154,3 +182,14 @@ body {
 .space-y-xl > :not([hidden]) ~ :not([hidden]) { margin-top: 40px; }
 .space-y-md > :not([hidden]) ~ :not([hidden]) { margin-top: 16px; }
 .space-y-xs > :not([hidden]) ~ :not([hidden]) { margin-top: 4px; }
+.space-y-stack_lg > :not([hidden]) ~ :not([hidden]) { margin-top: 24px; }
+.space-y-stack_md > :not([hidden]) ~ :not([hidden]) { margin-top: 16px; }
+
+.bg-near-black {
+    background-color: #0F1117;
+}
+
+.mesh-gradient {
+    background-image: radial-gradient(at 0% 0%, hsla(237, 63%, 55%, 0.15) 0px, transparent 50%),
+                       radial-gradient(at 100% 100%, hsla(237, 63%, 55%, 0.1) 0px, transparent 50%);
+}
