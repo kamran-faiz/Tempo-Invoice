@@ -17,9 +17,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('invoices', InvoiceController::class)->only(['index','store','update','destroy','show']);
     Route::post('invoices/{invoice}/submit-to-fbr', [InvoiceController::class, 'submitToFbr'])->name('invoices.submitToFbr');
     Route::get('/fbr-logs', [FbrLogController::class, 'index']);
-Route::get('/superadmin/dashboard', [CompanyController::class, 'index'])
-    ->name('superadmin.dashboard');    
-    Route::resource('superadmin/companies', CompanyController::class)->only(['store','destroy','update']);
+
+    Route::middleware(['superadmin'])->group(function () {
+        Route::get('/superadmin/dashboard', [CompanyController::class, 'index'])
+            ->name('superadmin.dashboard');
+        Route::resource('superadmin/companies', CompanyController::class)->only(['store','destroy','update']);
+    });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
