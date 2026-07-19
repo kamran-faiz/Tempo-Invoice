@@ -15,7 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
-
+          $middleware->alias([
+    'superadmin' => \App\Http\Middleware\EnsureIsSuperadmin::class,
+]);
+$middleware->alias([
+    'superadmin' => \App\Http\Middleware\EnsureIsSuperadmin::class,
+    'has_business' => \App\Http\Middleware\EnsureHasBusiness::class,
+]);
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);

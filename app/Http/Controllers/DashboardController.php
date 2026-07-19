@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    
     public function index(){
+        
         $metrics = [
             'total_revenue' => Invoice::sum('total'),
             'total_invoices' => Invoice::count(),
