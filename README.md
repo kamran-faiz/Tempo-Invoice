@@ -1,59 +1,56 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Tempo Invoice
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A multi-tenant invoicing SaaS for Pakistani businesses, built solo with Laravel 12, Inertia, and React 19 — with a working mock integration for FBR (Federal Board of Revenue) e-invoicing.
 
-## About Laravel
+This isn't a CRUD tutorial project. It's an attempt to build something close to what a real invoicing platform in Pakistan actually needs: multiple companies on one codebase, each isolated from the other, invoices that can be pushed to FBR for tax validation, and a superadmin layer to manage all of it from the top.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Why FBR matters here
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Pakistan has been rolling out mandatory digital invoicing through FBR, and any invoicing software sold locally eventually has to deal with submitting invoices for validation and getting back either an IRN (Invoice Reference Number) or a rejection. Since I don't have access to FBR's real sandbox, I built a separate mock API (tempo-fbr-mock) that mimics that submit/validate/reject flow, so Tempo Invoice talks to it exactly the way it would talk to the real thing. When an invoice is submitted, it either comes back validated with an IRN or rejected with a reason — and both paths are handled and logged.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+What's actually in it
 
-## Learning Laravel
+Multi-tenancy, built from scratch (no package).
+Every business gets its own isolated slice of data. This is enforced with a global Eloquent scope (BusinessScope) and a HasBusinessScope trait that any tenant-owned model uses — it auto-scopes queries to the logged-in user's business_id and auto-fills it on creation. A superadmin bypasses the scope entirely; everyone else only ever sees their own business's clients, products, and invoices, even if they try to hit another tenant's URL directly.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Superadmin panel.
+A separate layer above tenants for registering new companies, editing them, or deleting them — each with their own owning user created in the same transaction. Middleware (EnsureIsSuperadmin, EnsureHasBusiness) keeps superadmin routes and tenant routes from bleeding into each other.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Invoicing core.
+Invoices, line items, clients (with NTN/CNIC and B2B/B2C type, since that affects FBR treatment), and products with tax rates. Invoice numbers are auto-generated per business per year (INV-{business_id}-{year}-0001, incrementing) rather than left to the user. Payment status (paid/unpaid/overdue) and FBR status (pending/submitted/validated/rejected) are tracked separately, because a paid invoice and an FBR-validated invoice are not the same thing.
 
-## Laravel Sponsors
+FBR submission + logs.
+Submitting an invoice packages the client's NTN/CNIC, line items, and totals, sends them to the FBR mock service, and updates the invoice with either an IRN or a rejection reason. There's a dedicated FBR logs view with submission metrics (submitted / validated / pending / rejected) so a business owner can see at a glance what still needs attention.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Dashboards with real metrics, not placeholders.
+The tenant dashboard shows billed/collected/outstanding amounts and FBR-unsubmitted counts. The superadmin dashboard shows totals across every company: clients, invoices, revenue — bypassing tenant scoping deliberately, since that's the one place it's supposed to see everything.
 
-### Premium Partners
+Stack:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Laravel 12 (PHP 8.2+)
+Inertia.js + React 19
+Tailwind CSS v4
+SQLite for local dev
+react-hot-toast for flash notifications, Laravel Breeze for auth scaffolding
 
-## Contributing
+Running it locally
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+npm run dev
 
-## Code of Conduct
+In a separate terminal:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+php artisan serve
 
-## Security Vulnerabilities
+FBR submission requires the tempo-fbr-mock service running and FBR_API_URL set in .env to point at it.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Where it stands
 
-## License
+Core tenant flow (auth → clients → products → invoices → FBR submission) is working end to end. Superadmin company management is functional. Still in progress: refining the FBR rejection-handling UX, and PDF export for invoices.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This is a solo project I've been building alongside my day job as a Laravel developer, mainly to go deeper into multi-tenant architecture and tax-compliance integrations than my day-to-day work usually calls for.
+
